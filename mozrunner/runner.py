@@ -41,15 +41,18 @@ import killableprocess
 import logging
 import signal
 import exceptions
+from StringIO import StringIO
 
 from time import sleep
 import subprocess
 
 logger = logging.getLogger(__name__)
 
+stdout_wrap = StringIO()
+
 def run_command(cmd):
     """Run the given command in killable process."""
-    kwargs = {'stdout':sys.stdout ,'stderr':sys.stderr, 'stdin':sys.stdin}
+    kwargs = {'stdout':-1 ,'stderr':sys.stderr, 'stdin':sys.stdin}
     
     if sys.platform != "win32":
         return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), **kwargs)
@@ -105,8 +108,8 @@ class Mozilla(object):
         
     def set_command(self, cmd_args):
         self.command = [self.binary]
-        self.command += cmd_args
         self.command += ['-profile', self.profile]
+        self.command += cmd_args
     
     def set_binary(self, binary):
         self.binary = binary
@@ -121,17 +124,17 @@ class Mozilla(object):
     def start(self):
         self.process_handler = run_command(self.command)
 
-    def wait(self):
-        self.process_handler.wait()
+    def wait(self, timeout=None):
+        self.process_handler.wait(timeout=timeout)
         
         if sys.platform != 'win32':
             for pid in get_pids(self.name, self.process_handler.pid):    
                 self.process_handler.pid = pid
-                self.process_handler.wait()
+                self.process_handler.wait(timeout=timeout)
          
     def kill(self, kill_signal=signal.SIGTERM):
         """Kill the browser"""
-        if sys.platform == 'darwin':
+        if sys.platform != 'win32':
             self.process_handler.kill()
             for pid in get_pids(self.name, self.process_handler.pid):    
                 self.process_handler.pid = pid

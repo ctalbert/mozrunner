@@ -113,14 +113,15 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
         
     return runner_class(binary, profile, cmd_args=cmd_args)
     
-def get_moz_from_settings(settings):
+def get_moz_from_settings(settings, runner_class=runner.Firefox):
     if settings['MOZILLA_CREATE_NEW_PROFILE']:
         install.create_tmp_profile(settings)
     
     if settings.has_key('MOZILLA_PLUGINS'):
-        install.install_plugins(settings)
+        install.install_plugins(settings, runner_class)
         
     return get_moz(settings['MOZILLA_BINARY'], settings['MOZILLA_PROFILE'],
                    prefs=settings['MOZILLA_PREFERENCES'],
+                   runner_class=runner_class,
                    enable_default_prefs=settings.get('MOZILLA_ENABLE_DEFAULT_PREFS', True),         
                    cmd_args=settings['MOZILLA_CMD_ARGS'])

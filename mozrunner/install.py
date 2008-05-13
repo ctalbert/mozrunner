@@ -40,6 +40,10 @@ import tempfile
 import subprocess
 import commands
 import shutil
+import tempfile
+import zipfile
+from time import sleep
+from xml.etree import ElementTree
 
 import simplejson
 
@@ -87,15 +91,37 @@ def create_tmp_profile(settings):
     settings['MOZILLA_PROFILE'] = tmp_profile
     
 # ./firefox-bin -no-remote -profile "/Users/mikeal/Library/Application Support/windmill/firefox.profile" -install-global-extension /Users/mikeal/Desktop/jssh-firefox-3.x.xpi    
+
+def install_plugin(path_to_plugin, profile_path):
+    tree = ElementTree.ElementTree(file=os.path.join(path_to_plugin, 'install.rdf'))
+    plugin_id = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id').text
+    plugin_path = os.path.join(profile_path, 'extensions', plugin_id)
+    shutil.copytree(path_to_plugin, plugin_path)
     
-def install_plugins(settings):
+def install_plugins(settings, runner_class):
     binary = settings['MOZILLA_BINARY']
     profile = settings['MOZILLA_PROFILE']
     
     for plugin_path in settings['MOZILLA_PLUGINS']:
-        command = [binary, '-no-remote', '-profile', profile, '-install-global-extension', plugin_path]
-        return_code = subprocess.call(command)
-        assert not return_code
-    
+        if plugin_path.endswith('.xpi'):
+            tmpdir = tempfile.mkdtemp(suffix=".mozrunner_plugins")
+            compressed_file = zipfile.ZipFile(plugin_path, "r")
+            
+            for name in compressed_file.namelist():
+                if name.endswith('/'):
+                    os.mkdir(os.path.join(tmpdir, name))
+                else:
+                    data = compressed_file.read(name)
+                    f = open(os.path.join(tmpdir, name), 'w')
+                    f.write(data) ; f.close()
+                    
+            install_plugin(tmpdir, profile)
+        else:
+            install_plugin(tmpdir, profile)
+        
+    moz = runner_class(binary, profile)
+    moz.start()
+    sleep(1)
+    moz.stop()
     
 
