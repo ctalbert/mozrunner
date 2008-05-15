@@ -106,7 +106,6 @@ def install_plugins(settings, runner_class):
         if plugin_path.endswith('.xpi'):
             tmpdir = tempfile.mkdtemp(suffix=".mozrunner_plugins")
             compressed_file = zipfile.ZipFile(plugin_path, "r")
-            
             for name in compressed_file.namelist():
                 if name.endswith('/'):
                     os.mkdir(os.path.join(tmpdir, name))

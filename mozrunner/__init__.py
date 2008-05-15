@@ -105,29 +105,35 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
             plugins=None):
             
     if settings is None:
-        sys.modules[__name__].settings = simplesettings.initialize_settings(
-                                            global_settings, sys.modules[__name__],     
-                                            local_env_variable=settings_env,
-                                            )
+        settings = simplesettings.initialize_settings(
+                                        global_settings, sys.modules[__name__],     
+                                        local_env_variable=settings_env,
+                                        )
+        sys.modules[__name__].settings = settings
     
-    if settings.get('MOZILLA_PLUGINS', create_new_profile):
-        settings['MOZILLA_CREATE_NEW_PROFILE'] = create_new_profile
+    if settings.get('MOZILLA_CREATE_NEW_PROFILE', create_new_profile):
+        if not settings.has_key('MOZILLA_CREATE_NEW_PROFILE'):
+            settings['MOZILLA_CREATE_NEW_PROFILE'] = create_new_profile
+        settings['MOZILLA_DEFAULT_PROFILE'] = profile
         if settings['MOZILLA_CREATE_NEW_PROFILE']:
             install.create_tmp_profile(settings)
+            profile = settings['MOZILLA_PROFILE']
 
     if settings.get('MOZILLA_PLUGINS', plugins) is not None:
-        settings['MOZILLA_PLUGINS'] = plugins
+        if not settings.has_key('MOZILLA_PLUGINS'):
+            settings['MOZILLA_PLUGINS'] = plugins
         if settings.has_key('MOZILLA_PLUGINS'):
             install.install_plugins(settings, runner_class)
 
     install.set_preferences(profile, prefs, enable_default_prefs)    
-        
+    
     return runner_class(binary, profile, cmd_args=cmd_args)
     
 def get_moz_from_settings(settings, runner_class=runner.Firefox):
         
-    return get_moz(settings['MOZILLA_BINARY'], settings['MOZILLA_PROFILE'],
+    return get_moz(settings['MOZILLA_BINARY'], settings['MOZILLA_DEFAULT_PROFILE'],
                    prefs=settings['MOZILLA_PREFERENCES'],
                    runner_class=runner_class,
+                   settings=settings,
                    enable_default_prefs=settings.get('MOZILLA_ENABLE_DEFAULT_PREFS', True),         
                    cmd_args=settings['MOZILLA_CMD_ARGS'])
