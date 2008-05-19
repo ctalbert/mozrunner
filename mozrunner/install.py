@@ -50,6 +50,7 @@ import simplejson
 import mozrunner
 
 def set_preferences(profile, prefs, enable_default_prefs=True):
+    """Set all the preferences from dict in the profile's prefs.py"""
     prefs_file = os.path.join(profile, 'prefs.js')
     f = open(prefs_file, 'w+')
     f.write('\n#MozRunner Prefs Start\n')
@@ -72,12 +73,14 @@ def set_preferences(profile, prefs, enable_default_prefs=True):
     f.flush() ; f.close()
 
 def clean_prefs_file(prefs_file):
+    """Removed the preferences added by mozrunner from prefs.py in the given prefs_file."""
     lines = open(prefs_file, 'r').read().splitlines()
     s = lines.index('#MozRunner Prefs Star') ; e = lines.index('#MozRunner Prefs End')
     cleaned_prefs = '\n'.join(lines[:s] + lines[e:])
     f = open(prefs_file, 'w') ; f.write(cleaned_prefs) ; f.flush() ; f.close()
 
 def create_tmp_profile(settings):
+    """Create a new profile in tmp from default mozilla profile."""
     default_profile = settings['MOZILLA_DEFAULT_PROFILE']
     tmp_profile = tempfile.mkdtemp(suffix='.mozrunner')
     
@@ -93,12 +96,16 @@ def create_tmp_profile(settings):
 # ./firefox-bin -no-remote -profile "/Users/mikeal/Library/Application Support/windmill/firefox.profile" -install-global-extension /Users/mikeal/Desktop/jssh-firefox-3.x.xpi    
 
 def install_plugin(path_to_plugin, profile_path):
+    """Install a given extracted plugin in to the given profile_path."""
     tree = ElementTree.ElementTree(file=os.path.join(path_to_plugin, 'install.rdf'))
     plugin_id = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id').text
     plugin_path = os.path.join(profile_path, 'extensions', plugin_id)
     shutil.copytree(path_to_plugin, plugin_path)
     
 def install_plugins(settings, runner_class):
+    """Install all plugins defined in settings to the profile defined in settings. 
+    
+    Uses the runner_class to start and stop the browser after plugins are installed to run through any plugin initialization code."""
     binary = settings['MOZILLA_BINARY']
     profile = settings['MOZILLA_PROFILE']
     
@@ -120,7 +127,7 @@ def install_plugins(settings, runner_class):
         
     moz = runner_class(binary, profile)
     moz.start()
-    sleep(1)
+    sleep(2)
     moz.stop()
     
 

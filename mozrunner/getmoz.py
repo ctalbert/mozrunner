@@ -35,6 +35,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+# This is still very much IN DEVELOPMENT, don't plan on any of this working.
+
 build_url_map = {
     'mozilla-central-win32' :
     "/pub/mozilla.org/firefox/tinderbox-builds/mozilla-central-win32/firefox-4.0a1pre.en-US.win32.zip",

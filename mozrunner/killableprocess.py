@@ -11,7 +11,7 @@
 #
 # More Modifications
 # Copyright (c) 2006-2007 by Mike Taylor <bear@code-bear.com>
-# Copyright (c) 2007 by Mikeal Rogers <mikeal@mozilla.com>
+# Copyright (c) 2007-2008 by Mikeal Rogers <mikeal@mozilla.com>
 #
 # By obtaining, using, and/or copying this software and/or its
 # associated documentation, you agree that you have read, understood,

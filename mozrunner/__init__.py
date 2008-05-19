@@ -49,6 +49,7 @@ import install
 settings_env = 'MOZRUNNER_SETTINGS_FILE'
 
 def main():
+    """Command Line main function."""
     parser = optparse.OptionParser()
     parser.add_option("-s", "--settings", dest="settings",
                       help="Settings file for mozrunner.", metavar="MOZRUNNER_SETTINGS_FILE")
@@ -103,6 +104,7 @@ def main():
 def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={}, 
             enable_default_prefs=True, settings=None, create_new_profile=True,
             plugins=None):
+    """Get the Mozilla object from options, settings dict overrides kwargs"""
             
     if settings is None:
         settings = simplesettings.initialize_settings(
@@ -130,6 +132,7 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
     return runner_class(binary, profile, cmd_args=cmd_args)
     
 def get_moz_from_settings(settings, runner_class=runner.Firefox):
+    """Get Mozilla object rom settings dict."""    
         
     return get_moz(settings['MOZILLA_BINARY'], settings['MOZILLA_DEFAULT_PROFILE'],
                    prefs=settings['MOZILLA_PREFERENCES'],

@@ -60,6 +60,7 @@ def run_command(cmd):
         return killableprocess.Popen(cmd, **kwargs)
 
 def get_pids(name, minimun_pid=0):
+    """Get all the pids matching name, exclude any pids below minimum_pid."""
     if os.name == 'nt' or sys.platform == 'cygwin':
         import win32api, win32pdhutil, win32con
         #win32pdhutil.ShowAllProcesses()  #uncomment for testing
@@ -97,7 +98,7 @@ def kill_process_by_name(name):
                     logger.error('Could not kill process')        
 
 class Mozilla(object):
-    
+    """Base class for starting, stopping, and wait() for Mozilla applications."""
     CMD_ARGS = []
     
     def __init__(self, binary, profile, cmd_args=[], aggressively_kill=['crashreporter']):
@@ -153,7 +154,7 @@ class Mozilla(object):
         
         
 class Firefox(Mozilla):
-    """Firefox mozilla runner class."""
+    """Firefox Mozilla runner subclass. Handles set_binary tweaks for Ubuntu linux."""
     name = 'firefox'
     
     def set_binary(self, binary):

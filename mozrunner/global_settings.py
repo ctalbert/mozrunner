@@ -35,6 +35,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+# This global settings files is for use with the simplesettings library
+
 import os, sys
 
 def findInPath(fileName, path=os.environ['PATH']):
