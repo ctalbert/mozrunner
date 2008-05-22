@@ -98,7 +98,14 @@ def create_tmp_profile(settings):
 def install_plugin(path_to_plugin, profile_path):
     """Install a given extracted plugin in to the given profile_path."""
     tree = ElementTree.ElementTree(file=os.path.join(path_to_plugin, 'install.rdf'))
-    plugin_id = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id').text
+    plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
+    if plugin_element is None:
+        about = [e for e in tree.findall('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
+            e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') == 'urn:mozilla:install-manifest']
+        
+        plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
+    else:
+        plugin_id = plugin_element.text
     plugin_path = os.path.join(profile_path, 'extensions', plugin_id)
     shutil.copytree(path_to_plugin, plugin_path)
     
@@ -123,7 +130,7 @@ def install_plugins(settings, runner_class):
                     
             install_plugin(tmpdir, profile)
         else:
-            install_plugin(tmpdir, profile)
+            install_plugin(plugin_path, profile)
         
     moz = runner_class(binary, profile)
     moz.start()
