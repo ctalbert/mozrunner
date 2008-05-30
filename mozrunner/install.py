@@ -53,8 +53,6 @@ def set_preferences(profile, prefs, enable_default_prefs=True):
     """Set all the preferences from dict in the profile's prefs.py"""
     prefs_file = os.path.join(profile, 'user.js')
     f = open(prefs_file, 'w+')
-    print 'doing prefs'
-    print prefs, prefs_file, enable_default_prefs
     f.write('\n#MozRunner Prefs Start\n')
     
     if enable_default_prefs and hasattr(mozrunner, 'settings'):
@@ -73,7 +71,6 @@ def set_preferences(profile, prefs, enable_default_prefs=True):
 
     f.write('#MozRunner Prefs End\n')
     f.flush() ; f.close()
-    print open(prefs_file, 'r').read()
 
 def clean_prefs_file(prefs_file):
     """Removed the preferences added by mozrunner from prefs.py in the given prefs_file."""
