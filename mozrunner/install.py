@@ -51,8 +51,10 @@ import mozrunner
 
 def set_preferences(profile, prefs, enable_default_prefs=True):
     """Set all the preferences from dict in the profile's prefs.py"""
-    prefs_file = os.path.join(profile, 'prefs.js')
+    prefs_file = os.path.join(profile, 'user.js')
     f = open(prefs_file, 'w+')
+    print 'doing prefs'
+    print prefs, prefs_file, enable_default_prefs
     f.write('\n#MozRunner Prefs Start\n')
     
     if enable_default_prefs and hasattr(mozrunner, 'settings'):
@@ -63,7 +65,7 @@ def set_preferences(profile, prefs, enable_default_prefs=True):
         for line in pref_lines:
             f.write(line+'\n')
     
-    pref_lines = ['user_pref(%s, %s)' % 
+    pref_lines = ['user_pref(%s, %s);' % 
                   (simplejson.dumps(k), simplejson.dumps(v) ) for k, v in prefs.items()]
     f.write('#MozRunner Preferences\n')
     for line in pref_lines:
@@ -71,6 +73,7 @@ def set_preferences(profile, prefs, enable_default_prefs=True):
 
     f.write('#MozRunner Prefs End\n')
     f.flush() ; f.close()
+    print open(prefs_file, 'r').read()
 
 def clean_prefs_file(prefs_file):
     """Removed the preferences added by mozrunner from prefs.py in the given prefs_file."""
@@ -132,9 +135,9 @@ def install_plugins(settings, runner_class):
         else:
             install_plugin(plugin_path, profile)
         
-    moz = runner_class(binary, profile)
-    moz.start()
-    sleep(2)
-    moz.stop()
+    # moz = runner_class(binary, profile)
+    # moz.start()
+    # sleep(3.5)
+    # moz.stop()
     
 
