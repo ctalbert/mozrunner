@@ -87,7 +87,7 @@ elif sys.platform == 'linux2':
     for path in ('/usr/lib/iceweasel/defaults/profile',
                  '/usr/share/firefox/defaults/profile',
                  '/usr/lib/mozilla-firefox/defaults/profile',
-                 '/usr/lib/firefox-3.0b5/defaults/profile',):
+                 '/usr/lib/firefox-3.0/defaults/profile'):
         if os.path.isdir(path):
             MOZILLA_DEFAULT_PROFILE = path
 
