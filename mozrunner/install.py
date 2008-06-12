@@ -98,14 +98,18 @@ def create_tmp_profile(settings):
 def install_plugin(path_to_plugin, profile_path):
     """Install a given extracted plugin in to the given profile_path."""
     tree = ElementTree.ElementTree(file=os.path.join(path_to_plugin, 'install.rdf'))
-    plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
-    if plugin_element is None:
-        about = [e for e in tree.findall('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
-            e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') == 'urn:mozilla:install-manifest']
-        
-        plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
-    else:
+    #description_element = tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description/')
+    
+    about = [e for e in tree.findall('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
+        e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') == 'urn:mozilla:install-manifest']
+    if len(about) is 0:
+        plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
+        plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
         plugin_id = plugin_element.text
+    
+    else:
+        plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
+        
     plugin_path = os.path.join(profile_path, 'extensions', plugin_id)
     shutil.copytree(path_to_plugin, plugin_path)
     
