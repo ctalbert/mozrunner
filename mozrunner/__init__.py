@@ -113,6 +113,14 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
                                         )
         sys.modules[__name__].settings = settings
     
+    binary = os.path.abspath(binary)
+    
+    # Handle .app case
+    if binary.endswith('.app'):
+        apppath = binary
+        binary = os.path.abspath(os.path.join(apppath, 'Contents', 'MacOS', 'firefox-bin'))
+        profile = os.path.abspath(os.path.join(apppath, 'Contents', 'MacOS', 'defaults', 'profile'))
+    
     if settings.get('MOZILLA_CREATE_NEW_PROFILE', create_new_profile):
         if not settings.has_key('MOZILLA_CREATE_NEW_PROFILE'):
             settings['MOZILLA_CREATE_NEW_PROFILE'] = create_new_profile

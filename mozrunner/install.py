@@ -104,9 +104,7 @@ def install_plugin(path_to_plugin, profile_path):
         e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') == 'urn:mozilla:install-manifest']
     if len(about) is 0:
         plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
-        plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
         plugin_id = plugin_element.text
-    
     else:
         plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
         
