@@ -1,12 +1,12 @@
 Metadata-Version: 1.0
 Name: mozrunner
-Version: 0.3pre
+Version: 0.3
 Summary: Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)
 Home-page: http://code.google.com/p/mozrunner/
 Author: Mozilla, Mikeal Rogers
 Author-email: mikeal.rogers@gmail.com
 License: http://www.apache.org/licenses/LICENSE-2.0
-Description: UNKNOWN
+Description: Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)
 Platform: Any
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
