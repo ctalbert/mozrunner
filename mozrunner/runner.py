@@ -142,9 +142,9 @@ class Mozilla(object):
                 self.process_handler.kill()
         else:
             try:
-                self.process_handle.kill(group=True)
-            except:
-                logger.error('Cannot kill process')
+                self.process_handler.kill(group=True)
+            except Exception, e:
+                logger.error('Cannot kill process, '+type(e).__name__+' '+e.message)
                 
         for name in self.aggressively_kill:
             kill_process_by_name(name)
