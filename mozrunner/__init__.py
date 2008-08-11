@@ -139,8 +139,15 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
     
     return runner_class(binary, profile, cmd_args=cmd_args)
     
-def get_moz_from_settings(settings, runner_class=runner.Firefox):
-    """Get Mozilla object rom settings dict."""   
+def get_moz_from_settings(settings=None, runner_class=runner.Firefox):
+    """Get Mozilla object from a settings dict. If one is not passed a default settings dict is created."""
+    if settings is None:
+        settings = simplesettings.initialize_settings(
+                                        global_settings, sys.modules[__name__],     
+                                        local_env_variable=settings_env,
+                                        )
+        sys.modules[__name__].settings = settings
+           
     import mozrunner
     mozrunner.settings = settings 
         
