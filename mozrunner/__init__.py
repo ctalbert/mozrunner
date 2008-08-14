@@ -121,11 +121,14 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
         binary = os.path.abspath(os.path.join(apppath, 'Contents', 'MacOS', 'firefox-bin'))
         profile = os.path.abspath(os.path.join(apppath, 'Contents', 'MacOS', 'defaults', 'profile'))
     
+    
     if settings.get('MOZILLA_CREATE_NEW_PROFILE', create_new_profile):
         if not settings.has_key('MOZILLA_CREATE_NEW_PROFILE'):
             settings['MOZILLA_CREATE_NEW_PROFILE'] = create_new_profile
         settings['MOZILLA_DEFAULT_PROFILE'] = profile
         if settings['MOZILLA_CREATE_NEW_PROFILE']:
+            if settings['MOZILLA_DEFAULT_PROFILE'] is None:
+                raise Exception ('No default or local profile has been set.')
             install.create_tmp_profile(settings)
             profile = settings['MOZILLA_PROFILE']
 
