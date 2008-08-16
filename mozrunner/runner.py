@@ -36,6 +36,7 @@
 # ***** END LICENSE BLOCK *****
 
 import sys, os
+import pwd
 import commands
 import killableprocess
 import logging
@@ -118,7 +119,12 @@ class Mozilla(object):
     def set_profile(self, profile):
         """Set the profile path and do any cleanup or platform specific hacks"""
         if sys.platform == 'linux2':
-            print commands.getoutput('chown -R %s:%s %s' % (os.getlogin(), os.getlogin(), profile))
+            if sys.platform == 'linux2':
+                try:
+                    login = os.getlogin()
+                except OSError:
+                    login = pwd.getpwuid(os.geteuid())[0]
+            print commands.getoutput('chown -R %s:%s %s' % (login, login, profile))
             
         self.profile = profile
     

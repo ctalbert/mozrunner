@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: mozrunner
-Version: 0.4.3pre
+Version: 0.4.8pre
 Summary: Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)
 Home-page: http://code.google.com/p/mozrunner/
 Author: Mozilla, Mikeal Rogers
