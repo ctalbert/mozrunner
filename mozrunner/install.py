@@ -36,6 +36,7 @@
 # ***** END LICENSE BLOCK *****
 
 import sys, os
+import pwd
 import tempfile
 import subprocess
 import commands
@@ -85,7 +86,11 @@ def create_tmp_profile(settings):
     tmp_profile = tempfile.mkdtemp(suffix='.mozrunner')
     
     if sys.platform == 'linux2':
-        print commands.getoutput('chown -R %s:%s %s' % (os.getlogin(), os.getlogin(), tmp_profile))
+        try:
+            login = os.getlogin()
+        except OSError:
+            login = pwd.getpwuid(os.geteuid())[0]
+        print commands.getoutput('chown -R %s:%s %s' % (login, login, tmp_profile))
                                  
     if os.path.exists(tmp_profile) is True:
         shutil.rmtree(tmp_profile)
