@@ -41,7 +41,7 @@ desc = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Th
 summ = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)"""
 
 PACKAGE_NAME = "mozrunner"
-PACKAGE_VERSION = "0.5pre"
+PACKAGE_VERSION = "0.4.1pre"
 
 setup(name=PACKAGE_NAME,
       version=PACKAGE_VERSION,
