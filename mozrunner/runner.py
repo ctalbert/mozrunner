@@ -36,7 +36,8 @@
 # ***** END LICENSE BLOCK *****
 
 import sys, os
-import pwd
+if sys.platform != 'win32':
+    import pwd
 import commands
 import killableprocess
 import logging
