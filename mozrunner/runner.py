@@ -59,7 +59,7 @@ def run_command(cmd, env=None):
     if sys.platform != "win32":
         return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **kwargs)
     else:
-        return killableprocess.Popen(cmd, env=env, **kwargs)
+        return killableprocess.Popen(cmd, **kwargs)
 
 def get_pids(name, minimun_pid=0):
     """Get all the pids matching name, exclude any pids below minimum_pid."""
