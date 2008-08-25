@@ -140,7 +140,7 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
 
     install.set_preferences(profile, prefs, enable_default_prefs)    
     
-    return runner_class(binary, profile, cmd_args=cmd_args)
+    return runner_class(binary, profile, cmd_args=cmd_args, env=settings.get('MOZILLA_ENV', None))
     
 def get_moz_from_settings(settings=None, runner_class=runner.Firefox):
     """Get Mozilla object from a settings dict. If one is not passed a default settings dict is created."""

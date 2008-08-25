@@ -52,14 +52,14 @@ logger = logging.getLogger(__name__)
 
 stdout_wrap = StringIO()
 
-def run_command(cmd):
+def run_command(cmd, env=None):
     """Run the given command in killable process."""
     kwargs = {'stdout':-1 ,'stderr':sys.stderr, 'stdin':sys.stdin}
     
     if sys.platform != "win32":
-        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), **kwargs)
+        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **kwargs)
     else:
-        return killableprocess.Popen(cmd, **kwargs)
+        return killableprocess.Popen(cmd, env=env, **kwargs)
 
 def get_pids(name, minimun_pid=0):
     """Get all the pids matching name, exclude any pids below minimum_pid."""
@@ -103,11 +103,12 @@ class Mozilla(object):
     """Base class for starting, stopping, and wait() for Mozilla applications."""
     CMD_ARGS = []
     
-    def __init__(self, binary, profile, cmd_args=[], aggressively_kill=['crashreporter']):
+    def __init__(self, binary, profile, cmd_args=[], aggressively_kill=['crashreporter'], env=None):
         self.set_profile(profile)
         self.set_binary(binary)
         self.set_command(cmd_args + self.CMD_ARGS)
         self.aggressively_kill = aggressively_kill
+        self.mozilla_env = env
         
     def set_command(self, cmd_args):
         self.command = [self.binary]
@@ -130,7 +131,7 @@ class Mozilla(object):
         self.profile = profile
     
     def start(self):
-        self.process_handler = run_command(self.command)
+        self.process_handler = run_command(self.command, self.mozilla_env)
 
     def wait(self, timeout=None):
         self.process_handler.wait(timeout=timeout)
