@@ -61,7 +61,10 @@ MOZILLA_DEFAULT_PREFS = {'extensions.update.enabled'    : False,
                         
 MOZILLA_PREFERENCES = {} # For user config file to set additional prefs
 MOZILLA_CMD_ARGS = []
-MOZILLA_ENV = {'MOZ_NO_REMOTE':"1"}
+if sys.platform != 'win32':
+    MOZILLA_ENV = {'MOZ_NO_REMOTE':"1"}
+else:
+    MOZILLA_ENV = {}
 
 MOZILLA_CREATE_NEW_PROFILE = True
 
