@@ -37,7 +37,7 @@
 
 # This global settings files is for use with the simplesettings library
 
-import os, sys
+import os, sys, copy
 
 def findInPath(fileName, path=os.environ['PATH']):
     dirs = path.split(os.pathsep)
@@ -61,7 +61,8 @@ MOZILLA_DEFAULT_PREFS = {'extensions.update.enabled'    : False,
                         
 MOZILLA_PREFERENCES = {} # For user config file to set additional prefs
 MOZILLA_CMD_ARGS = []
-MOZILLA_ENV = {'MOZ_NO_REMOTE':"1"}
+MOZILLA_ENV = copy.copy(os.environ) 
+MOZILLA_ENV.update({'MOZ_NO_REMOTE':"1",})
 
 MOZILLA_CREATE_NEW_PROFILE = True
 
