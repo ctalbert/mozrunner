@@ -94,7 +94,7 @@ elif sys.platform == 'linux2':
         if os.path.isdir(path):
             profiles = sorted([d for d in os.listdir(os.path.join(path)) if d.startswith(name)])
             if len(profiles) > 0:
-                MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1]) 
+                MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1], 'defaults', 'profile') 
 
 
 elif os.name == 'nt' or sys.platform == 'cygwin':
