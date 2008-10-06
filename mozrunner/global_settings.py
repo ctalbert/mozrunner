@@ -87,14 +87,14 @@ elif sys.platform == 'linux2':
     MOZILLA_DEFAULT_PROFILE = None
 
     for path, name in (('/usr/lib', 'iceweasel',),
-                 ('/usr/share', 'firefox',),
-                 ('/usr/lib/', 'mozilla-firefox',),
-                 ('/usr/lib/', 'firefox',),
-                 ):
+                       ('/usr/share', 'firefox',),
+                       ('/usr/lib/', 'mozilla-firefox',),
+                       ('/usr/lib/', 'firefox',),
+                       ):
         if os.path.isdir(path):
             profiles = sorted([d for d in os.listdir(os.path.join(path)) if d.startswith(name)])
             if len(profiles) > 0:
-                MOZILLA_DEFAULT_PROFILE = profiles[-1] 
+                MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1]) 
 
 
 elif os.name == 'nt' or sys.platform == 'cygwin':
