@@ -92,7 +92,9 @@ elif sys.platform == 'linux2':
                        ('/usr/lib/', 'firefox',),
                        ):
         if os.path.isdir(path):
-            profiles = sorted([d for d in os.listdir(os.path.join(path)) if d.startswith(name)])
+            profiles = sorted([d for d in os.listdir(os.path.join(path)) if 
+                               d.startswith(name) and 
+                               os.path.isdir(os.path.join(path, d, 'defaults', 'profile'))])
             if len(profiles) > 0:
                 MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1], 'defaults', 'profile') 
 
@@ -101,7 +103,7 @@ elif os.name == 'nt' or sys.platform == 'cygwin':
     firefoxBin = findInPath('firefox')
     
     bin_locations = [os.path.join(os.environ['ProgramFiles'], 'Mozilla Firefox', 'firefox.exe'),
-                     os.path.join(os.environ['ProgramFiles'], 'Mozilla Firefox 3 Beta 5', 'firefox.exe'),
+                     #os.path.join(os.environ['ProgramFiles'], 'Mozilla Firefox 3 Beta 5', 'firefox.exe'),
                     ]
     
     if firefoxBin is None:
