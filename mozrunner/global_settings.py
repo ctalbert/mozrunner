@@ -85,6 +85,10 @@ elif sys.platform == 'linux2':
         MOZILLA_BINARY = firefoxBin
     
     MOZILLA_DEFAULT_PROFILE = None
+    
+    def NaN(str):
+        try: int(str); return False;
+        except: return True 
 
     for path, name in (('/usr/lib', 'iceweasel',),
                        ('/usr/share', 'firefox',),
@@ -94,7 +98,8 @@ elif sys.platform == 'linux2':
         if os.path.isdir(path):
             profiles = sorted([d for d in os.listdir(os.path.join(path)) if 
                                d.startswith(name) and 
-                               os.path.isdir(os.path.join(path, d, 'defaults', 'profile'))])
+                               os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) and
+                               not NaN(d[len(name+'-')])])
             if len(profiles) > 0:
                 MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1], 'defaults', 'profile') 
 
