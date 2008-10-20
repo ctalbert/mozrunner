@@ -96,10 +96,11 @@ elif sys.platform == 'linux2':
                        ('/usr/lib/', 'firefox',),
                        ):
         if os.path.isdir(path):
-            profiles = sorted([d for d in os.listdir(os.path.join(path)) if 
-                               d.startswith(name) and 
-                               os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) and
-                               not NaN(d[len(name+'-')])])
+            profiles = sorted([d for d in os.listdir(os.path.join(path)) if (
+                               d.startswith(name) ) and 
+                               ( os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) ) and
+                               ( ('-' not in d) or ( not NaN(d[len(name+'-')]) ) )
+                               ])
             if len(profiles) > 0:
                 MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1], 'defaults', 'profile') 
 
