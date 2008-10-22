@@ -170,6 +170,7 @@ class Firefox(Mozilla):
         if sys.platform == 'linux2':    
             # This block is to fix Ubuntu's stupid shell script that breaks a bunch of options
             new_bin = open(binary, 'r').read()
+            new_bin = new_bin.replace('$0', 'firefox')
             new_bin = new_bin.replace('file://', '')
             new_bin = new_bin.replace('MOZILLA_BIN="${progbase}-bin"', 'MOZILLA_BIN="firefox-bin"')
             new_bin_path = self.profile+'/'+'mozrunner-firefox'
