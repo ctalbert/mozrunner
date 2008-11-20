@@ -1,2 +1,1 @@
 simplesettings >= 0.3
-simplejson

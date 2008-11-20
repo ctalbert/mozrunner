@@ -131,6 +131,9 @@ def get_moz(binary, profile, runner_class=runner.Firefox, cmd_args=[], prefs={},
                 raise Exception ('No default or local profile has been set.')
             install.create_tmp_profile(settings)
             profile = settings['MOZILLA_PROFILE']
+    else:
+        settings['MOZILLA_PROFILE'] = profile
+        settings['MOZILLA_CREATE_NEW_PROFILE'] = create_new_profile
 
     if settings.get('MOZILLA_PLUGINS', plugins) is not None:
         if not settings.has_key('MOZILLA_PLUGINS'):

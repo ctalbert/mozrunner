@@ -47,7 +47,10 @@ import zipfile
 from time import sleep
 from xml.etree import ElementTree
 
-import simplejson
+try:
+    import json as simplejson
+except:
+    import simplejson
 
 import mozrunner
 
