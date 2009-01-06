@@ -47,6 +47,9 @@ import zipfile
 from time import sleep
 from xml.etree import ElementTree
 
+from distutils import dir_util
+copytree = dir_util.copy_tree
+
 try:
     import json as simplejson
 except:
@@ -99,7 +102,7 @@ def create_tmp_profile(settings):
     if os.path.exists(tmp_profile) is True:
         shutil.rmtree(tmp_profile)
 
-    shutil.copytree(default_profile, tmp_profile)
+    copytree(default_profile, tmp_profile, preserve_symlinks=1)
     settings['MOZILLA_PROFILE'] = tmp_profile
     
 # ./firefox-bin -no-remote -profile "/Users/mikeal/Library/Application Support/windmill/firefox.profile" -install-global-extension /Users/mikeal/Desktop/jssh-firefox-3.x.xpi    
@@ -118,7 +121,7 @@ def install_plugin(path_to_plugin, profile_path):
         plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
         
     plugin_path = os.path.join(profile_path, 'extensions', plugin_id)
-    shutil.copytree(path_to_plugin, plugin_path)
+    copytree(path_to_plugin, plugin_path, preserve_symlinks=1)
     
 def install_plugins(settings, runner_class):
     """Install all plugins defined in settings to the profile defined in settings. 
