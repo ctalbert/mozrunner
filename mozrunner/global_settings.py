@@ -108,8 +108,10 @@ elif sys.platform == 'linux2':
 elif os.name == 'nt' or sys.platform == 'cygwin':
     firefoxBin = findInPath('firefox')
     
-    bin_locations = [os.path.join(os.environ['ProgramFiles'], 'Mozilla Firefox', 'firefox.exe'),
-                     #os.path.join(os.environ['ProgramFiles'], 'Mozilla Firefox 3 Beta 5', 'firefox.exe'),
+    bin_locations = [os.path.join(os.environ['ProgramFiles'], 
+                                  'Mozilla Firefox', 'firefox.exe'),
+                     os.path.join(os.environ['ProgramFiles'], 
+                                  'Mozilla Firefox3', 'firefox.exe'),
                     ]
     
     if firefoxBin is None:
