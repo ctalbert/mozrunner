@@ -90,7 +90,8 @@ elif sys.platform == 'linux2':
         try: int(str); return False;
         except: return True 
 
-    for path, name in (('/usr/lib', 'iceweasel',),
+    for path, name in (('/opt', 'firefox',),
+                       ('/usr/lib', 'iceweasel',),
                        ('/usr/share', 'firefox',),
                        ('/usr/lib/', 'mozilla-firefox',),
                        ('/usr/lib/', 'firefox',),
