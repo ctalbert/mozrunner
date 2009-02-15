@@ -100,7 +100,8 @@ elif sys.platform == 'linux2':
             profiles = sorted([d for d in os.listdir(os.path.join(path)) if (
                                d.startswith(name) ) and 
                                ( os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) ) and
-                               ( ('-' not in d) or ( len(name+'-') <= len(d) and not NaN(d[len(name+'-')]) ) )
+                               ( ('-' not in d) or ( len(name+'-') <= len(d) and not NaN(d[len(name+'-')]) or
+                               (d == 'mozilla-firefox')) )
                                ])
             if len(profiles) > 0:
                 MOZILLA_DEFAULT_PROFILE = os.path.join(path, profiles[-1], 'defaults', 'profile') 
