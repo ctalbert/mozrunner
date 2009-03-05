@@ -42,9 +42,9 @@ desc = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Th
 summ = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)"""
 
 PACKAGE_NAME = "mozrunner"
-PACKAGE_VERSION = "1.1"
+PACKAGE_VERSION = "2.0a1"
 
-deps = ['simplesettings >= 0.3']
+deps = []
 
 if not sys.version.startswith('2.6'):
     deps.append('simplejson')
@@ -61,7 +61,7 @@ setup(name=PACKAGE_NAME,
       packages=find_packages(),
       entry_points="""
           [console_scripts]
-          mozrunner = mozrunner:main
+          mozrunner = mozrunner:cli
         """,
       platforms =['Any'],
       install_requires = deps,
