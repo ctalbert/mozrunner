@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mozrunner &#8212; Browser Automation Tool &mdash; mozrunner v2.0a1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2.0a1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="mozrunner v2.0a1 documentation" href="" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="">mozrunner v2.0a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-mozrunner">
+<h1><tt class="xref docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Browser Automation Tool<a class="headerlink" href="#module-mozrunner" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="mozrunner.Profile">
+<!--[mozrunner.Profile]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Profile</tt><big>(</big><span class="optional">[</span><em>default_profile</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>create_new</em><span class="optional">[</span>, <em>plugins</em><span class="optional">[</span>, <em>preferences</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>XULRunner Application Profile Handling.</p>
+<p><em>default_profile</em> is the location of the clean profile used by the application to
+create new profiles. If one is not provided <a title="mozrunner.Profile.find_default_profile" class="reference internal" href="#mozrunner.Profile.find_default_profile"><tt class="xref docutils literal"><span class="pre">find_default_profile()</span></tt></a> will be called
+and that profile used.</p>
+<p><em>create_new</em> instructs the init to create a new profile in a tmp diretory from the
+<em>default_profile</em>. Defaults to <cite>True</cite>.</p>
+<p><em>profile</em> is the location of the profile you would like to use. <em>create_new</em> must be set to
+False in order to use this.</p>
+<p><em>plugins</em> is a list of plugins to install in to the profile. You can use paths to
+directories containing extracted plugins or .xpi files which will b extracted and
+installed.</p>
+<p><em>preferences</em> is a dictionary of additional preferences to be set in the profile.
+Most Profile subclasses have a class member named &#8220;preferences&#8221;, this is copied
+during initialization of the instance and updated with the <em>preferences</em> passed to
+the constructor.</p>
+<dl class="attribute">
+<dt id="mozrunner.Profile.names">
+<!--[mozrunner.Profile.names]--><tt class="descname">names</tt><a class="headerlink" href="#mozrunner.Profile.names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>List of product names in order of priority. Not present by default, must be defined in
+subclass.</p>
+<dl class="attribute">
+<dt id="mozrunner.Profile.preferences">
+<!--[mozrunner.Profile.preferences]--><tt class="descname">preferences</tt><a class="headerlink" href="#mozrunner.Profile.preferences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The default preferences dictionary. If another preferences dictionary is passed to
+the constructor this default dict will be copied and then updated.</p>
+<dl class="method">
+<dt id="mozrunner.Profile.find_default_profile">
+<!--[mozrunner.Profile.find_default_profile]--><tt class="descname">find_default_profile</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Profile.find_default_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Finds the default profile location. Uses <a title="mozrunner.Profile.names" class="reference internal" href="#mozrunner.Profile.names"><tt class="xref docutils literal"><span class="pre">names</span></tt></a> .</p>
+<p>There is currently a bug in the Windows code: It&#8217;s currently hardcoded to Firefox.</p>
+<dl class="method">
+<dt id="mozrunner.Profile.create_new_profile">
+<!--[mozrunner.Profile.create_new_profile]--><tt class="descname">create_new_profile</tt><big>(</big><em>default_profile_location</em><big>)</big><a class="headerlink" href="#mozrunner.Profile.create_new_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Creates a new profile in tmp and returns the path.</p>
+<p><em>default_profile</em> is the path to the default profile described in the class docs
+above.</p>
+<dl class="method">
+<dt id="mozrunner.Profile.install_plugin">
+<!--[mozrunner.Profile.install_plugin]--><tt class="descname">install_plugin</tt><big>(</big><em>plugin</em><big>)</big><a class="headerlink" href="#mozrunner.Profile.install_plugin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Installs a plugin in the profile.</p>
+<p><em>plugin</em> is a path to either an extracted addon or a .xpi .</p>
+<dl class="method">
+<dt id="mozrunner.Profile.set_preferences">
+<!--[mozrunner.Profile.set_preferences]--><tt class="descname">set_preferences</tt><big>(</big><em>preferences</em><big>)</big><a class="headerlink" href="#mozrunner.Profile.set_preferences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Takes a dictionary, <em>preferences</em>, and converts it to JavaScript <cite>set_pref()</cite> calls
+written to the profile&#8217;s user.js .</p>
+<dl class="method">
+<dt id="mozrunner.Profile.clean_preferences">
+<!--[mozrunner.Profile.clean_preferences]--><tt class="descname">clean_preferences</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Profile.clean_preferences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Cleans any preferences installed by mozunner from the profile.</p>
+<dl class="method">
+<dt id="mozrunner.Profile.clean_plugins">
+<!--[mozrunner.Profile.clean_plugins]--><tt class="descname">clean_plugins</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Profile.clean_plugins" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Removes all plugins installed by mozrunner from the profile.</p>
+<dl class="method">
+<dt id="mozrunner.Profile.cleanup">
+<!--[mozrunner.Profile.cleanup]--><tt class="descname">cleanup</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Profile.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Triggers all cleanup operations. If a new profile was created in tmp it will
+remove the entire directory tree, if not it will call <a title="mozrunner.Profile.clean_preferences" class="reference internal" href="#mozrunner.Profile.clean_preferences"><tt class="xref docutils literal"><span class="pre">clean_preferences()</span></tt></a> and
+<a title="mozrunner.Profile.clean_plugins" class="reference internal" href="#mozrunner.Profile.clean_plugins"><tt class="xref docutils literal"><span class="pre">clean_plugins()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mozrunner.FirefoxProfile">
+<!--[mozrunner.FirefoxProfile]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">FirefoxProfile</tt><big>(</big><span class="optional">[</span><em>default_profile</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>create_new</em><span class="optional">[</span>, <em>plugins</em><span class="optional">[</span>, <em>preferences</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.FirefoxProfile" title="Permalink to this definition">¶</a></dt>
+<dd>Firefox specific subclass of <a title="mozrunner.Profile" class="reference internal" href="#mozrunner.Profile"><tt class="xref docutils literal"><span class="pre">Profile</span></tt></a>.</dd></dl>
+
+<dl class="class">
+<dt id="mozrunner.Runner">
+<!--[mozrunner.Runner]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Runner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>cmdargs</em><span class="optional">[</span>, <em>env</em><span class="optional">[</span>, <em>aggressively_kill</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Runner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles all running operations. Finds binary, starts and stops the process.</p>
+<p><em>binary</em> is the path to the application binary. If it is not specified
+<a title="mozrunner.Runner.find_binary" class="reference internal" href="#mozrunner.Runner.find_binary"><tt class="xref docutils literal"><span class="pre">find_binary()</span></tt></a> will be used to find the product binary.</p>
+<p><em>profile</em> is a <a title="mozrunner.Profile" class="reference internal" href="#mozrunner.Profile"><tt class="xref docutils literal"><span class="pre">Profile</span></tt></a> instance. If not specified one will be created,
+<a title="mozrunner.Runner.profile_class" class="reference internal" href="#mozrunner.Runner.profile_class"><tt class="xref docutils literal"><span class="pre">profile_class</span></tt></a> is used, no arguments are passed to it&#8217;s constructor.</p>
+<p><em>cmdargs</em> are additional command line arguments that will be added to the
+subprocess call. Defaults to <cite>[]</cite></p>
+<p><em>env</em> is a dictionary containing all the environment variables to be used in the
+subprcoess call. Defaults to to a copy of <cite>os.environ</cite> with <cite>{&#8220;MOZ_NO_REMOTE&#8221;:&#8221;1&#8221;}</cite>
+added.</p>
+<p><em>aggressivel_kill</em> is a list of additional process names that need to be killed
+after killing the product. Defaults to <cite>[&#8220;crashreporter&#8221;]</cite>.</p>
+<dl class="attribute">
+<dt id="mozrunner.Runner.names">
+<!--[mozrunner.Runner.names]--><tt class="descname">names</tt><a class="headerlink" href="#mozrunner.Runner.names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>List of product names in order of priority. Not present by default, must be defined in
+subclass.</p>
+<dl class="attribute">
+<dt id="mozrunner.Runner.profile_class">
+<!--[mozrunner.Runner.profile_class]--><tt class="descname">profile_class</tt><a class="headerlink" href="#mozrunner.Runner.profile_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The default class to use when creating a new profile when one isn&#8217;t passed to the
+constructor.</p>
+<dl class="attribute">
+<dt id="mozrunner.Runner.command">
+<!--[mozrunner.Runner.command]--><tt class="descname">command</tt><a class="headerlink" href="#mozrunner.Runner.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The command list for subprocess. Not usually that usable without having the instance,
+it&#8217;s more common to use <cite>&#64;property</cite> for attribute. Does not need to include <em>cmdargs</em>
+sent to the constructor, those will be added later.</p>
+<dl class="method">
+<dt id="mozrunner.Runner.find_binary">
+<!--[mozrunner.Runner.find_binary]--><tt class="descname">find_binary</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.find_binary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Finds the binary location. Uses <a title="mozrunner.Runner.names" class="reference internal" href="#mozrunner.Runner.names"><tt class="xref docutils literal"><span class="pre">names</span></tt></a> for lookup names.</p>
+<p>There is currently a bug in the Windows code: It&#8217;s currently hardcoded to Firefox.</p>
+<dl class="method">
+<dt id="mozrunner.Runner.start">
+<!--[mozrunner.Runner.start]--><tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Starts the subprocess call and sets <tt class="xref docutils literal"><span class="pre">process_handler</span></tt> to the returned
+subprocess handler.</p>
+<dl class="method">
+<dt id="mozrunner.Runner.wait">
+<!--[mozrunner.Runner.wait]--><tt class="descname">wait</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Blocks and waits for the call to exit.</p>
+<dl class="method">
+<dt id="mozrunner.Runner.kill">
+<!--[mozrunner.Runner.kill]--><tt class="descname">kill</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.kill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Kills the application. This call is very aggressive, it kills all process id&#8217;s
+that are higher than the original pid if the one of the <a title="mozrunner.Runner.names" class="reference internal" href="#mozrunner.Runner.names"><tt class="xref docutils literal"><span class="pre">names</span></tt></a> is in the
+process name.</p>
+<dl class="method">
+<dt id="mozrunner.Runner.stop">
+<!--[mozrunner.Runner.stop]--><tt class="descname">stop</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Friendly pointer to <a title="mozrunner.Runner.kill" class="reference internal" href="#mozrunner.Runner.kill"><tt class="xref docutils literal"><span class="pre">kill()</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mozrunner.FirefoxRunner">
+<!--[mozrunner.FirefoxRunner]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">FirefoxRunner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>cmdargs</em><span class="optional">[</span>, <em>env</em><span class="optional">[</span>, <em>aggressively_kill</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.FirefoxRunner" title="Permalink to this definition">¶</a></dt>
+<dd>Firefox specific subclass of <a title="mozrunner.Runner" class="reference internal" href="#mozrunner.Runner"><tt class="xref docutils literal"><span class="pre">Runner</span></tt></a>.</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li><a href="">mozrunner v2.0a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Mikeal Rogers &lt;mikeal.rogers@gmail.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

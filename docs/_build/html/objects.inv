@@ -1,0 +1,25 @@
+# Sphinx inventory version 1
+# Project: mozrunner
+# Version: 2.0a1
+mozrunner mod index.html
+mozrunner.Profile.set_preferences method index.html
+mozrunner.Profile.find_default_profile method index.html
+mozrunner.Runner class index.html
+mozrunner.Profile.create_new_profile method index.html
+mozrunner.Runner.profile_class attribute index.html
+mozrunner.Runner.command attribute index.html
+mozrunner.Profile.preferences attribute index.html
+mozrunner.Runner.kill method index.html
+mozrunner.Profile.names attribute index.html
+mozrunner.FirefoxRunner class index.html
+mozrunner.Profile.clean_preferences method index.html
+mozrunner.Runner.names attribute index.html
+mozrunner.Runner.wait method index.html
+mozrunner.Runner.start method index.html
+mozrunner.Profile.clean_plugins method index.html
+mozrunner.Profile.install_plugin method index.html
+mozrunner.Runner.find_binary method index.html
+mozrunner.FirefoxProfile class index.html
+mozrunner.Profile.cleanup method index.html
+mozrunner.Runner.stop method index.html
+mozrunner.Profile class index.html
