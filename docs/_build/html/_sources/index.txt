@@ -234,4 +234,38 @@ Command Line Customization and Modification
    
    Calls :meth:`parse_and_get_runner` and passed the returned value to :meth:`start`.
 
+Examples
+========
+
+Firefox subclasses::
+
+   class FirefoxProfile(mozrunner.Profile):
+       """Specialized Profile subclass for Firefox"""
+       preferences = {'extensions.update.enabled'    : False,
+                      'extensions.update.notifyUser' : False,
+                      'browser.shell.checkDefaultBrowser' : False,
+                      'browser.tabs.warnOnClose' : False,
+                      'browser.warnOnQuit': False,
+                      'browser.sessionstore.resume_from_crash': False,
+                      }
+
+       @property
+       def names(self):
+           if sys.platform == 'darwin':
+               return ['firefox', 'minefield', 'shiretoko']
+           if sys.platform == 'linux2':
+               return ['firefox', 'mozilla-firefox', 'iceweasel']
+           if os.name == 'nt' or sys.platfrom == 'cygwin':
+               return ['firefox']
+
+   class FirefoxRunner(mozrunner.Runner):
+       """Specialized Runner subclass for running Firefox."""
+       @property
+       def names(self):
+           if sys.platform == 'darwin':
+               return ['firefox', 'minefield', 'shiretoko']
+           if sys.platform == 'linux2':
+               return ['firefox', 'mozilla-firefox', 'iceweasel']
+           if os.name == 'nt' or sys.platfrom == 'cygwin':
+               return ['firefox']
 

@@ -323,6 +323,41 @@ is responsible for setting this attribute before calling <a title="mozrunner.CLI
 
 </div>
 </div>
+<div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>Firefox subclasses:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">FirefoxProfile</span><span class="p">(</span><span class="n">mozrunner</span><span class="o">.</span><span class="n">Profile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Specialized Profile subclass for Firefox&quot;&quot;&quot;</span>
+    <span class="n">preferences</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;extensions.update.enabled&#39;</span>    <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;extensions.update.notifyUser&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;browser.shell.checkDefaultBrowser&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;browser.tabs.warnOnClose&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;browser.warnOnQuit&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="s">&#39;browser.sessionstore.resume_from_crash&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                   <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s">&#39;darwin&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">,</span> <span class="s">&#39;minefield&#39;</span><span class="p">,</span> <span class="s">&#39;shiretoko&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s">&#39;linux2&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">,</span> <span class="s">&#39;mozilla-firefox&#39;</span><span class="p">,</span> <span class="s">&#39;iceweasel&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;nt&#39;</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platfrom</span> <span class="o">==</span> <span class="s">&#39;cygwin&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">FirefoxRunner</span><span class="p">(</span><span class="n">mozrunner</span><span class="o">.</span><span class="n">Runner</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Specialized Runner subclass for running Firefox.&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s">&#39;darwin&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">,</span> <span class="s">&#39;minefield&#39;</span><span class="p">,</span> <span class="s">&#39;shiretoko&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s">&#39;linux2&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">,</span> <span class="s">&#39;mozilla-firefox&#39;</span><span class="p">,</span> <span class="s">&#39;iceweasel&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;nt&#39;</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platfrom</span> <span class="o">==</span> <span class="s">&#39;cygwin&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s">&#39;firefox&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
 
 
           </div>
@@ -338,6 +373,7 @@ is responsible for setting this attribute before calling <a title="mozrunner.CLI
 <li><a class="reference external" href="#command-line-customization-and-modification">Command Line Customization and Modification</a></li>
 </ul>
 </li>
+<li><a class="reference external" href="#examples">Examples</a></li>
 </ul>
 
             <h3>This Page</h3>
