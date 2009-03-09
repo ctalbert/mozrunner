@@ -58,7 +58,7 @@ setup(name=PACKAGE_NAME,
       author_email='mikeal.rogers@gmail.com',
       url='http://code.google.com/p/mozrunner/',
       license='http://www.apache.org/licenses/LICENSE-2.0',
-      packages=find_packages(),
+      packages=find_packages(exclude=['legacy']),
       entry_points="""
           [console_scripts]
           mozrunner = mozrunner:cli

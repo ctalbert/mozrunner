@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mozrunner &#8212; Browser Automation Tool &mdash; mozrunner v2.0a1 documentation</title>
+    <title>mozrunner &#8212; Reliable start/stop/configuration of Mozilla Applications &mdash; mozrunner v2.0a1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -41,7 +41,9 @@
             
   
   <div class="section" id="module-mozrunner">
-<h1><tt class="xref docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Browser Automation Tool<a class="headerlink" href="#module-mozrunner" title="Permalink to this headline">¶</a></h1>
+<h1><tt class="xref docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Reliable start/stop/configuration of Mozilla Applications<a class="headerlink" href="#module-mozrunner" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="profile-handling-and-modification">
+<h2>Profile Handling and Modification<a class="headerlink" href="#profile-handling-and-modification" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="mozrunner.Profile">
 <!--[mozrunner.Profile]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Profile</tt><big>(</big><span class="optional">[</span><em>default_profile</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>create_new</em><span class="optional">[</span>, <em>plugins</em><span class="optional">[</span>, <em>preferences</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Profile" title="Permalink to this definition">¶</a></dt>
@@ -130,6 +132,9 @@ remove the entire directory tree, if not it will call <a title="mozrunner.Profil
 <!--[mozrunner.FirefoxProfile]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">FirefoxProfile</tt><big>(</big><span class="optional">[</span><em>default_profile</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>create_new</em><span class="optional">[</span>, <em>plugins</em><span class="optional">[</span>, <em>preferences</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.FirefoxProfile" title="Permalink to this definition">¶</a></dt>
 <dd>Firefox specific subclass of <a title="mozrunner.Profile" class="reference internal" href="#mozrunner.Profile"><tt class="xref docutils literal"><span class="pre">Profile</span></tt></a>.</dd></dl>
 
+</div>
+<div class="section" id="process-run-and-environment-handling-and-discovery">
+<h2>Process Run and Environment Handling and Discovery<a class="headerlink" href="#process-run-and-environment-handling-and-discovery" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="mozrunner.Runner">
 <!--[mozrunner.Runner]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Runner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>cmdargs</em><span class="optional">[</span>, <em>env</em><span class="optional">[</span>, <em>aggressively_kill</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Runner" title="Permalink to this definition">¶</a></dt>
@@ -186,7 +191,7 @@ subprocess handler.</p>
 <!--[mozrunner.Runner.wait]--><tt class="descname">wait</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.wait" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Blocks and waits for the call to exit.</p>
+<p>Blocks and waits for the process to exit.</p>
 <dl class="method">
 <dt id="mozrunner.Runner.kill">
 <!--[mozrunner.Runner.kill]--><tt class="descname">kill</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.Runner.kill" title="Permalink to this definition">¶</a></dt>
@@ -209,6 +214,115 @@ process name.</p>
 <dd>Firefox specific subclass of <a title="mozrunner.Runner" class="reference internal" href="#mozrunner.Runner"><tt class="xref docutils literal"><span class="pre">Runner</span></tt></a>.</dd></dl>
 
 </div>
+<div class="section" id="command-line-customization-and-modification">
+<h2>Command Line Customization and Modification<a class="headerlink" href="#command-line-customization-and-modification" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="mozrunner.CLI">
+<!--[mozrunner.CLI]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">CLI</tt><a class="headerlink" href="#mozrunner.CLI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command Line Interface</p>
+<dl class="attribute">
+<dt id="mozrunner.CLI.parser_options">
+<!--[mozrunner.CLI.parser_options]--><tt class="descname">parser_options</tt><a class="headerlink" href="#mozrunner.CLI.parser_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Dictionary of <tt class="xref docutils literal"><span class="pre">optparse.OptionParser</span></tt>. option definitions. Keys are 2 length
+tuples with the short and long argument name definitions. Values must be
+keyword argument dictionaries:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">SubCLI</span><span class="p">(</span><span class="n">CLI</span><span class="p">):</span>
+    <span class="n">parser_options</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">CLI</span><span class="o">.</span><span class="n">parser_options</span><span class="p">)</span>
+    <span class="n">parser_options</span><span class="p">[(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;--file&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span><span class="bp">None</span><span class="p">,</span> <span class="s">&quot;dest&quot;</span><span class="p">:</span><span class="s">&quot;file&quot;</span><span class="p">,</span> <span class="s">&quot;help&quot;</span><span class="p">:</span><span class="s">&quot;Log file name.&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="mozrunner.CLI.parser">
+<!--[mozrunner.CLI.parser]--><tt class="descname">parser</tt><a class="headerlink" href="#mozrunner.CLI.parser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Instace of <tt class="xref docutils literal"><span class="pre">optparse.OptionParser</span></tt>. Created during instance initialiation.</p>
+<dl class="attribute">
+<dt id="mozrunner.CLI.runner_class">
+<!--[mozrunner.CLI.runner_class]--><tt class="descname">runner_class</tt><a class="headerlink" href="#mozrunner.CLI.runner_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Default runner class. Should be subclass of <a title="mozrunner.Runner" class="reference internal" href="#mozrunner.Runner"><tt class="xref docutils literal"><span class="pre">Runner</span></tt></a>.
+Defaults to <a title="mozrunner.FirefoxRunner" class="reference internal" href="#mozrunner.FirefoxRunner"><tt class="xref docutils literal"><span class="pre">FirefoxRunner</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="mozrunner.CLI.profile_class">
+<!--[mozrunner.CLI.profile_class]--><tt class="descname">profile_class</tt><a class="headerlink" href="#mozrunner.CLI.profile_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Default profile class. Should be subclass of <a title="mozrunner.Profile" class="reference internal" href="#mozrunner.Profile"><tt class="xref docutils literal"><span class="pre">Profile</span></tt></a>.
+Defaults to <a title="mozrunner.FirefoxProfile" class="reference internal" href="#mozrunner.FirefoxProfile"><tt class="xref docutils literal"><span class="pre">FirefoxProfile</span></tt></a>.</p>
+<dl class="method">
+<dt id="mozrunner.CLI.parse_and_get_runner">
+<!--[mozrunner.CLI.parse_and_get_runner]--><tt class="descname">parse_and_get_runner</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.CLI.parse_and_get_runner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Responsible for calling <a title="mozrunner.CLI.parser" class="reference internal" href="#mozrunner.CLI.parser"><tt class="xref docutils literal"><span class="pre">parser</span></tt></a>.parse_args() and setting
+<a title="mozrunner.CLI.options" class="reference internal" href="#mozrunner.CLI.options"><tt class="xref docutils literal"><span class="pre">options</span></tt></a> and <a title="mozrunner.CLI.args" class="reference internal" href="#mozrunner.CLI.args"><tt class="xref docutils literal"><span class="pre">args</span></tt></a>. Then responsible for calling
+<a title="mozrunner.CLI.get_profile" class="reference internal" href="#mozrunner.CLI.get_profile"><tt class="xref docutils literal"><span class="pre">get_profile()</span></tt></a> and <a title="mozrunner.CLI.get_runner" class="reference internal" href="#mozrunner.CLI.get_runner"><tt class="xref docutils literal"><span class="pre">get_runner()</span></tt></a> with parsed args from
+<a title="mozrunner.CLI.options" class="reference internal" href="#mozrunner.CLI.options"><tt class="xref docutils literal"><span class="pre">options</span></tt></a> and returns the runner instance. Default implementation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">parse_and_get_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+     <span class="sd">&quot;&quot;&quot;Parses the command line arguments and returns a runner instance.&quot;&quot;&quot;</span>
+     <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">options</span>  <span class="o">=</span> <span class="n">options</span>
+     <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plugins</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+         <span class="n">plugins</span> <span class="o">=</span> <span class="p">[]</span>
+     <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_profile</span><span class="p">(</span><span class="n">default_profile</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">default_profile</span><span class="p">,</span>
+                                <span class="n">profile</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">create_new</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">create_new</span><span class="p">,</span>
+                                <span class="n">plugins</span><span class="o">=</span><span class="n">plugins</span><span class="p">)</span>
+     <span class="n">runner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_runner</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">binary</span><span class="p">,</span>
+                              <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">)</span>
+     <span class="k">return</span> <span class="n">runner</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="mozrunner.CLI.options">
+<!--[mozrunner.CLI.options]--><tt class="descname">options</tt><a class="headerlink" href="#mozrunner.CLI.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Options object returned from <a title="mozrunner.CLI.parser" class="reference internal" href="#mozrunner.CLI.parser"><tt class="xref docutils literal"><span class="pre">parser</span></tt></a>.parse_args(). <a title="mozrunner.CLI.parse_and_get_runner" class="reference internal" href="#mozrunner.CLI.parse_and_get_runner"><tt class="xref docutils literal"><span class="pre">parse_and_get_runner()</span></tt></a>
+is responsible for setting this attribute before calling <a title="mozrunner.CLI.get_profile" class="reference internal" href="#mozrunner.CLI.get_profile"><tt class="xref docutils literal"><span class="pre">get_profile()</span></tt></a> and
+<a title="mozrunner.CLI.get_runner" class="reference internal" href="#mozrunner.CLI.get_runner"><tt class="xref docutils literal"><span class="pre">get_runner()</span></tt></a>.</p>
+<dl class="attribute">
+<dt id="mozrunner.CLI.args">
+<!--[mozrunner.CLI.args]--><tt class="descname">args</tt><a class="headerlink" href="#mozrunner.CLI.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Args list returned from <a title="mozrunner.CLI.parser" class="reference internal" href="#mozrunner.CLI.parser"><tt class="xref docutils literal"><span class="pre">parser</span></tt></a>.parse_args(). <a title="mozrunner.CLI.parse_and_get_runner" class="reference internal" href="#mozrunner.CLI.parse_and_get_runner"><tt class="xref docutils literal"><span class="pre">parse_and_get_runner()</span></tt></a>
+is responsible for setting this attribute before calling <a title="mozrunner.CLI.get_profile" class="reference internal" href="#mozrunner.CLI.get_profile"><tt class="xref docutils literal"><span class="pre">get_profile()</span></tt></a> and
+<a title="mozrunner.CLI.get_runner" class="reference internal" href="#mozrunner.CLI.get_runner"><tt class="xref docutils literal"><span class="pre">get_runner()</span></tt></a>.</p>
+<dl class="method">
+<dt id="mozrunner.CLI.get_profile">
+<!--[mozrunner.CLI.get_profile]--><tt class="descname">get_profile</tt><big>(</big><span class="optional">[</span><em>default_profile</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>create_new</em><span class="optional">[</span>, <em>plugins</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.CLI.get_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Takes arguments as parsed from <a title="mozrunner.CLI.options" class="reference internal" href="#mozrunner.CLI.options"><tt class="xref docutils literal"><span class="pre">options</span></tt></a> and returns an instance of
+<a title="mozrunner.CLI.profile_class" class="reference internal" href="#mozrunner.CLI.profile_class"><tt class="xref docutils literal"><span class="pre">profile_class</span></tt></a></p>
+<dl class="method">
+<dt id="mozrunner.CLI.get_runner">
+<!--[mozrunner.CLI.get_runner]--><tt class="descname">get_runner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.CLI.get_runner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Takes arguments as parsed from <a title="mozrunner.CLI.options" class="reference internal" href="#mozrunner.CLI.options"><tt class="xref docutils literal"><span class="pre">options</span></tt></a> and the profile instance returned from
+<a title="mozrunner.CLI.get_profile" class="reference internal" href="#mozrunner.CLI.get_profile"><tt class="xref docutils literal"><span class="pre">get_profile()</span></tt></a> and returns an instance of <a title="mozrunner.CLI.runner_class" class="reference internal" href="#mozrunner.CLI.runner_class"><tt class="xref docutils literal"><span class="pre">runner_class</span></tt></a>.</p>
+<dl class="method">
+<dt id="mozrunner.CLI.start">
+<!--[mozrunner.CLI.start]--><tt class="descname">start</tt><big>(</big><em>runner</em><big>)</big><a class="headerlink" href="#mozrunner.CLI.start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Starts the runner and waits for <a title="mozrunner.Runner.wait" class="reference internal" href="#mozrunner.Runner.wait"><tt class="xref docutils literal"><span class="pre">Runner.wait()</span></tt></a> or <cite>KeyboardInterrupt</cite>.</p>
+<dl class="method">
+<dt id="mozrunner.CLI.run">
+<!--[mozrunner.CLI.run]--><tt class="descname">run</tt><big>(</big><big>)</big><a class="headerlink" href="#mozrunner.CLI.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Calls <a title="mozrunner.CLI.parse_and_get_runner" class="reference internal" href="#mozrunner.CLI.parse_and_get_runner"><tt class="xref docutils literal"><span class="pre">parse_and_get_runner()</span></tt></a> and passed the returned value to <a title="mozrunner.CLI.start" class="reference internal" href="#mozrunner.CLI.start"><tt class="xref docutils literal"><span class="pre">start()</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+</div>
 
 
           </div>
@@ -216,6 +330,16 @@ process name.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+            <h3><a href="">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Reliable start/stop/configuration of Mozilla Applications</a><ul>
+<li><a class="reference external" href="#profile-handling-and-modification">Profile Handling and Modification</a></li>
+<li><a class="reference external" href="#process-run-and-environment-handling-and-discovery">Process Run and Environment Handling and Discovery</a></li>
+<li><a class="reference external" href="#command-line-customization-and-modification">Command Line Customization and Modification</a></li>
+</ul>
+</li>
+</ul>
+
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/index.txt">Show Source</a></li>

@@ -1,10 +1,13 @@
-:mod:`mozrunner` --- Browser Automation Tool
-===========================================
+:mod:`mozrunner` --- Reliable start/stop/configuration of Mozilla Applications
+============================================
 
 .. module:: mozrunner
    :synopsis: Reliably starts/stops/configures XULRunner applications.
 .. moduleauthor:: Mikeal Rogers <mikeal.rogers@gmail.com>
 .. sectionauthor:: Mikeal Rogers <mikeal.rogers@gmail.com>
+
+Profile Handling and Modification
+---------------------------------
 
 .. class:: Profile([default_profile[, profile[, create_new[, plugins[, preferences]]]]])
 
@@ -81,6 +84,9 @@
 
    Firefox specific subclass of :class:`Profile`.
 
+Process Run and Environment Handling and Discovery
+--------------------------------------------------
+
 .. class:: Runner([binary[, profile[, cmdargs[, env[, aggressively_kill]]]]])
 
    Handles all running operations. Finds binary, starts and stops the process.
@@ -130,7 +136,7 @@
    
    .. method:: wait()
    
-   Blocks and waits for the call to exit.
+   Blocks and waits for the process to exit.
    
    .. method:: kill()
    
@@ -145,13 +151,87 @@
 .. class:: FirefoxRunner([binary[, profile[, cmdargs[, env[, aggressively_kill]]]]])
 
    Firefox specific subclass of :class:`Runner`.
+
+Command Line Customization and Modification
+-------------------------------------------
    
+.. class:: CLI()
    
+   Command Line Interface 
+   
+   .. attribute:: parser_options
+   
+   Dictionary of :class:`optparse.OptionParser`. option definitions. Keys are 2 length 
+   tuples with the short and long argument name definitions. Values must be 
+   keyword argument dictionaries::
+   
+      class SubCLI(CLI):
+          parser_options = copy.copy(CLI.parser_options)
+          parser_options[('f', '--file')] = {"default":None, "dest":"file", "help":"Log file name."}
 
+   .. attribute:: parser
+   
+   Instace of :class:`optparse.OptionParser`. Created during instance initialiation.
 
+   .. attribute:: runner_class
+   
+   Default runner class. Should be subclass of :class:`Runner`.
+   Defaults to :class:`FirefoxRunner`. 
 
+   .. attribute:: profile_class
+   
+   Default profile class. Should be subclass of :class:`Profile`.
+   Defaults to :class:`FirefoxProfile`.
+   
+   .. method:: parse_and_get_runner()
+   
+   Responsible for calling :attr:`parser`.parse_args() and setting 
+   :attr:`options` and :attr:`args`. Then responsible for calling
+   :meth:`get_profile` and :meth:`get_runner` with parsed args from 
+   :attr:`options` and returns the runner instance. Default implementation::
+   
+      def parse_and_get_runner(self):
+           """Parses the command line arguments and returns a runner instance."""
+           (options, args) = self.parser.parse_args()
+           self.options  = options
+           self.args = args
+           if self.options.plugins is None:
+               plugins = []
+           profile = self.get_profile(default_profile=options.default_profile, 
+                                      profile=options.profile, create_new=options.create_new,
+                                      plugins=plugins)
+           runner = self.get_runner(binary=self.options.binary, 
+                                    profile=profile)
+           return runner
 
-
-
+   .. attribute:: options
+   
+   Options object returned from :attr:`parser`.parse_args(). :meth:`parse_and_get_runner()`
+   is responsible for setting this attribute before calling :meth:`get_profile` and 
+   :meth:`get_runner`.
+   
+   .. attribute:: args
+   
+   Args list returned from :attr:`parser`.parse_args(). :meth:`parse_and_get_runner()`
+   is responsible for setting this attribute before calling :meth:`get_profile` and 
+   :meth:`get_runner`.
+   
+   .. method:: get_profile([default_profile[, profile[, create_new[, plugins]]]])
+   
+   Takes arguments as parsed from :attr:`options` and returns an instance of 
+   :attr:`profile_class`
+   
+   .. method:: get_runner([binary[, profile]])
+   
+   Takes arguments as parsed from :attr:`options` and the profile instance returned from
+   :meth:`get_profile` and returns an instance of :attr:`runner_class`.
+   
+   .. method:: start(runner)
+   
+   Starts the runner and waits for :meth:`Runner.wait()` or `KeyboardInterrupt`.
+   
+   .. method:: run()
+   
+   Calls :meth:`parse_and_get_runner` and passed the returned value to :meth:`start`.
 
 
