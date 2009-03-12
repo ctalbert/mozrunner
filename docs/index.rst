@@ -87,7 +87,7 @@ Profile Handling and Modification
 Process Run and Environment Handling and Discovery
 --------------------------------------------------
 
-.. class:: Runner([binary[, profile[, cmdargs[, env[, aggressively_kill]]]]])
+.. class:: Runner([binary[, profile[, cmdargs[, env[, aggressively_kill[, kp_kwargs]]]]]])
 
    Handles all running operations. Finds binary, starts and stops the process.
 
@@ -106,6 +106,8 @@ Process Run and Environment Handling and Discovery
    
    *aggressivel_kill* is a list of additional process names that need to be killed
    after killing the product. Defaults to `["crashreporter"]`.
+   
+   *kp_kwargs* the additional arguments sent to `killablleprocess.Popen`. Defaults to `{}`.
    
    .. attribute:: names
    

@@ -137,7 +137,7 @@ remove the entire directory tree, if not it will call <a title="mozrunner.Profil
 <h2>Process Run and Environment Handling and Discovery<a class="headerlink" href="#process-run-and-environment-handling-and-discovery" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="mozrunner.Runner">
-<!--[mozrunner.Runner]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Runner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>cmdargs</em><span class="optional">[</span>, <em>env</em><span class="optional">[</span>, <em>aggressively_kill</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Runner" title="Permalink to this definition">¶</a></dt>
+<!--[mozrunner.Runner]-->class <tt class="descclassname">mozrunner.</tt><tt class="descname">Runner</tt><big>(</big><span class="optional">[</span><em>binary</em><span class="optional">[</span>, <em>profile</em><span class="optional">[</span>, <em>cmdargs</em><span class="optional">[</span>, <em>env</em><span class="optional">[</span>, <em>aggressively_kill</em><span class="optional">[</span>, <em>kp_kwargs</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#mozrunner.Runner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles all running operations. Finds binary, starts and stops the process.</p>
 <p><em>binary</em> is the path to the application binary. If it is not specified
 <a title="mozrunner.Runner.find_binary" class="reference internal" href="#mozrunner.Runner.find_binary"><tt class="xref docutils literal"><span class="pre">find_binary()</span></tt></a> will be used to find the product binary.</p>
@@ -150,6 +150,7 @@ subprcoess call. Defaults to to a copy of <cite>os.environ</cite> with <cite>{&#
 added.</p>
 <p><em>aggressivel_kill</em> is a list of additional process names that need to be killed
 after killing the product. Defaults to <cite>[&#8220;crashreporter&#8221;]</cite>.</p>
+<p><em>kp_kwargs</em> the additional arguments sent to <cite>killablleprocess.Popen</cite>. Defaults to <cite>{}</cite>.</p>
 <dl class="attribute">
 <dt id="mozrunner.Runner.names">
 <!--[mozrunner.Runner.names]--><tt class="descname">names</tt><a class="headerlink" href="#mozrunner.Runner.names" title="Permalink to this definition">¶</a></dt>

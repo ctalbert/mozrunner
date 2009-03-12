@@ -74,14 +74,19 @@ def findInPath(fileName, path=os.environ['PATH']):
                 return os.path.join(dir, fileName + ".exe")
     return None
 
-def run_command(cmd, env=None):
+stdout = -1
+stderr = sys.stderr
+stdin = sys.stdin
+
+def run_command(cmd, env=None, **kwargs):
     """Run the given command in killable process."""
-    kwargs = {'stdout':-1 ,'stderr':sys.stderr, 'stdin':sys.stdin}
+    killable_kwargs = {'stdout':stdout ,'stderr':stderr, 'stdin':stdin}
+    killable_kwargs.update(kwargs)
 
     if sys.platform != "win32":
-        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **kwargs)
+        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **killable_kwargs)
     else:
-        return killableprocess.Popen(cmd, **kwargs)
+        return killableprocess.Popen(cmd, **killable_kwargs)
 
 def get_pids(name, minimun_pid=0):
     """Get all the pids matching name, exclude any pids below minimum_pid."""
@@ -331,14 +336,14 @@ class Runner(object):
     """Handles all running operations. Finds bins, runs and kills the process."""
     
     def __init__(self, binary=None, profile=None, cmdargs=[], env=None, 
-                 aggressively_kill=['crashreporter']):
+                 aggressively_kill=['crashreporter'], kp_kwargs={}):
         if binary is None:
             self.binary = self.find_binary()
         elif binary.endswith('.app'):
             self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
             self.profile = os.path.join(binary, 'Contents/MacOS/defaults/profile')    
         
-        if profile is None and not hasattr(self.profile):
+        if profile is None and not hasattr(self, "profile"):
             self.profile = self.profile_class()
         elif profile is not None:
             self.profile = profile
@@ -350,6 +355,7 @@ class Runner(object):
         else:    
             self.env = env
         self.aggressively_kill = aggressively_kill
+        self.kp_kwargs = kp_kwargs
     
     def find_binary(self):
         """Finds the binary for self.names if one was not provided."""
@@ -394,7 +400,7 @@ class Runner(object):
         
     def start(self):
         """Run self.command in the proper environment."""
-        self.process_handler = run_command(self.command+self.cmdargs, self.env)
+        self.process_handler = run_command(self.command+self.cmdargs, self.env, **self.kp_kwargs)
 
     def wait(self, timeout=None):
         """Wait for the browser to exit."""
@@ -428,6 +434,9 @@ class Runner(object):
     
 class FirefoxRunner(Runner):
     """Specialized Runner subclass for running Firefox."""
+    
+    profile_class = FirefoxProfile
+    
     @property
     def names(self):
         if sys.platform == 'darwin':
@@ -481,9 +490,10 @@ class CLI(object):
         
         return runner
 
-    def get_profile(self, default_profile=None, profile=None, create_new=None, plugins=[]):
+    def get_profile(self, default_profile=None, profile=None, create_new=None, plugins=[],
+                    preferences={}):
         """Returns the profile instance for the given command line arguments."""    
-        return self.profile_class(default_profile, profile, create_new, plugins)
+        return self.profile_class(default_profile, profile, create_new, plugins, preferences)
         
     def get_runner(self, binary=None, profile=None):
         """Returns the runner instance for the given command line binary arguemt
