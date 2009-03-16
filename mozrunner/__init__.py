@@ -481,6 +481,8 @@ class CLI(object):
         self.args = args
         if self.options.plugins is None:
             plugins = []
+        else:
+            plugins = self.options.plugins.split(',')
         profile = self.get_profile(default_profile=options.default_profile, 
                                    profile=options.profile, create_new=options.create_new,
                                    plugins=plugins)
