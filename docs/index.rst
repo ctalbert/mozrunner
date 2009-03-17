@@ -1,5 +1,5 @@
 :mod:`mozrunner` --- Reliable start/stop/configuration of Mozilla Applications
-============================================
+==============================================================================
 
 .. module:: mozrunner
    :synopsis: Reliably starts/stops/configures XULRunner applications.
@@ -18,29 +18,29 @@ Profile Handling and Modification
    and that profile used.
 
    *create_new* instructs the init to create a new profile in a tmp diretory from the 
-   *default_profile*. Defaults to `True`.
+   *default_profile*. Defaults to :const:`True`.
 
    *profile* is the location of the profile you would like to use. *create_new* must be set to 
-   False in order to use this.
+   :const:`False` in order to use this.
 
-   *plugins* is a list of plugins to install in to the profile. You can use paths to 
+   *plugins* is a :class:`list` of plugins to install in to the profile. You can use paths to 
    directories containing extracted plugins or .xpi files which will b extracted and
    installed.
 
-   *preferences* is a dictionary of additional preferences to be set in the profile.
+   *preferences* is a :class:`dict` of additional preferences to be set in the profile.
    Most Profile subclasses have a class member named "preferences", this is copied
    during initialization of the instance and updated with the *preferences* passed to 
    the constructor.
    
    .. attribute:: names
    
-   List of product names in order of priority. Not present by default, must be defined in 
-   subclass.
+   :class:`list` of product names in order of priority. Not present by default, must 
+   be defined in subclass.
    
    .. attribute:: preferences
    
-   The default preferences dictionary. If another preferences dictionary is passed to
-   the constructor this default dict will be copied and then updated.
+   The default preferences :class:`dict`. If another preferences :class:`dict` is passed to
+   the constructor this default will be copied and then updated.
 
    .. method:: find_default_profile()
 
@@ -63,7 +63,7 @@ Profile Handling and Modification
 	
    .. method:: set_preferences(preferences)
 	
-   Takes a dictionary, *preferences*, and converts it to JavaScript `set_pref()` calls
+   Takes a :class:`dict`, *preferences*, and converts it to JavaScript `set_pref()` calls
    written to the profile's user.js .
 	
    .. method:: clean_preferences()
@@ -100,11 +100,11 @@ Process Run and Environment Handling and Discovery
    *cmdargs* are additional command line arguments that will be added to the 
    subprocess call. Defaults to `[]`
    
-   *env* is a dictionary containing all the environment variables to be used in the
-   subprcoess call. Defaults to to a copy of `os.environ` with `{"MOZ_NO_REMOTE":"1"}`
+   *env* is a :class:`dict` containing all the environment variables to be used in the
+   subprocess call. Defaults to a copy of `os.environ` with `{"MOZ_NO_REMOTE":"1"}`
    added.
    
-   *aggressivel_kill* is a list of additional process names that need to be killed
+   *aggressivel_kill* is a :class:`list` of additional process names that need to be killed
    after killing the product. Defaults to `["crashreporter"]`.
    
    *kp_kwargs* the additional arguments sent to `killablleprocess.Popen`. Defaults to `{}`.
@@ -121,9 +121,9 @@ Process Run and Environment Handling and Discovery
    
    .. attribute:: command
    
-   The command list for subprocess. Not usually that usable without having the instance, 
-   it's more common to use `@property` for attribute. Does not need to include *cmdargs* 
-   sent to the constructor, those will be added later.
+   The command :class:`list` for subprocess. Not usually that usable without having the 
+   instance, it's more common to use :func:`property` for attribute. Does not need to include 
+   *cmdargs* sent to the constructor, those will be added later.
    
    .. method:: find_binary()
 
@@ -163,9 +163,9 @@ Command Line Customization and Modification
    
    .. attribute:: parser_options
    
-   Dictionary of :class:`optparse.OptionParser`. option definitions. Keys are 2 length 
+   :class:`dict` of :class:`optparse.OptionParser` option definitions. Keys are 
    tuples with the short and long argument name definitions. Values must be 
-   keyword argument dictionaries::
+   a keyword argument :class:`dict`::
    
       class SubCLI(CLI):
           parser_options = copy.copy(CLI.parser_options)
@@ -214,9 +214,9 @@ Command Line Customization and Modification
    
    .. attribute:: args
    
-   Args list returned from :attr:`parser`.parse_args(). :meth:`parse_and_get_runner()`
-   is responsible for setting this attribute before calling :meth:`get_profile` and 
-   :meth:`get_runner`.
+   Args :class:`list` returned from :attr:`parser`.parse_args(). 
+   :meth:`parse_and_get_runner()` is responsible for setting this attribute before calling 
+   :meth:`get_profile` and :meth:`get_runner`.
    
    .. method:: get_profile([default_profile[, profile[, create_new[, plugins]]]])
    
@@ -230,11 +230,11 @@ Command Line Customization and Modification
    
    .. method:: start(runner)
    
-   Starts the runner and waits for :meth:`Runner.wait()` or `KeyboardInterrupt`.
+   Starts the runner and waits for :meth:`Runner.wait()` or :exc:`KeyboardInterrupt`.
    
    .. method:: run()
    
-   Calls :meth:`parse_and_get_runner` and passed the returned value to :meth:`start`.
+   Calls :meth:`parse_and_get_runner` and passes the returned value to :meth:`start`.
 
 Examples
 ========
