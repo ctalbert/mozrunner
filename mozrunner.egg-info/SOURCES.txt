@@ -25,14 +25,6 @@ docs/_build/html/_static/searchtools.js
 docs/_build/html/_static/sphinxdoc.css
 docs/_build/html/_static/stickysidebar.css
 docs/_build/html/_static/traditional.css
-legacy/__init__.py
-legacy/getmoz.py
-legacy/global_settings.py
-legacy/install.py
-legacy/killableprocess.py
-legacy/runner.py
-legacy/termutil.py
-legacy/winprocess.py
 mozrunner/__init__.py
 mozrunner/killableprocess.py
 mozrunner/winprocess.py
