@@ -341,7 +341,9 @@ class Runner(object):
             self.binary = self.find_binary()
         elif binary.endswith('.app'):
             self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
-            self.profile = os.path.join(binary, 'Contents/MacOS/defaults/profile')    
+            if profile is None:
+                self.profile = self.profile_class(os.path.join(binary, 
+                                                  'Contents/MacOS/defaults/profile'))    
         
         if profile is None and not hasattr(self, "profile"):
             self.profile = self.profile_class()
