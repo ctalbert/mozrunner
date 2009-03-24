@@ -330,6 +330,16 @@ class FirefoxProfile(Profile):
             return ['firefox', 'mozilla-firefox', 'iceweasel']
         if os.name == 'nt' or sys.platfrom == 'cygwin':
             return ['firefox']
+
+class ThunderbirdProfile(Profile):
+    preferences = {'extensions.update.enabled'    : False,
+                   'extensions.update.notifyUser' : False,
+                   'browser.shell.checkDefaultBrowser' : False,
+                   'browser.tabs.warnOnClose' : False,
+                   'browser.warnOnQuit': False,
+                   'browser.sessionstore.resume_from_crash': False,
+                   }
+    names = ["thunderbird", "shredder"]
         
 
 class Runner(object):
@@ -447,6 +457,12 @@ class FirefoxRunner(Runner):
             return ['firefox', 'mozilla-firefox', 'iceweasel']
         if os.name == 'nt' or sys.platfrom == 'cygwin':
             return ['firefox']
+
+class ThunderbirdRunner(Runner):
+    """Specialized Runner subclass for running Thunderbird"""
+    profile_class = ThunderbirdProfile
+    
+    names = ["thunderbird", "shredder"]
 
 class CLI(object):
     """Command line interface."""                      
