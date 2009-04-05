@@ -527,6 +527,7 @@ class CLI(object):
         """Runs self.start(self.parse_and_get_runner())"""
         runner = self.parse_and_get_runner()
         self.start(runner)
+        runner.profile.cleanup()
 
     def start(self, runner):
         """Starts the runner and waits for Firefox to exitor Keyboard Interrupt.
@@ -538,7 +539,6 @@ class CLI(object):
         except KeyboardInterrupt:
             runner.stop()
         
-        runner.profile.cleanup()
         
 def cli():
     CLI().run()        
