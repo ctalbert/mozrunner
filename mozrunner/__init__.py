@@ -279,7 +279,7 @@ class Profile(object):
     def set_preferences(self, preferences):
         """Adds preferences dict to profile preferences"""
         prefs_file = os.path.join(self.profile, 'user.js')
-        f = open(prefs_file, 'w+')
+        f = open(prefs_file, 'a+')
         f.write('\n#MozRunner Prefs Start\n')
 
         pref_lines = ['user_pref(%s, %s);' % 
@@ -293,7 +293,7 @@ class Profile(object):
     def clean_preferences(self):
         """Removed preferences added by mozrunner."""
         lines = open(os.path.join(self.profile, 'user.js'), 'r').read().splitlines()
-        s = lines.index('#MozRunner Prefs Star') ; e = lines.index('#MozRunner Prefs End')
+        s = lines.index('#MozRunner Prefs Start') ; e = lines.index('#MozRunner Prefs End')
         cleaned_prefs = '\n'.join(lines[:s] + lines[e:])
         f = open(os.path.join(self.profile, 'user.js'), 'w') 
         f.write(cleaned_prefs) ; f.flush() ; f.close()
