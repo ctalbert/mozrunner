@@ -294,7 +294,7 @@ class Profile(object):
         """Removed preferences added by mozrunner."""
         lines = open(os.path.join(self.profile, 'user.js'), 'r').read().splitlines()
         s = lines.index('#MozRunner Prefs Start') ; e = lines.index('#MozRunner Prefs End')
-        cleaned_prefs = '\n'.join(lines[:s] + lines[e:])
+        cleaned_prefs = '\n'.join(lines[:s] + lines[e+1:])
         f = open(os.path.join(self.profile, 'user.js'), 'w') 
         f.write(cleaned_prefs) ; f.flush() ; f.close()
         
