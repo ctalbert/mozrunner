@@ -355,6 +355,9 @@ class Runner(object):
                 self.profile = self.profile_class(os.path.join(binary, 
                                                   'Contents/MacOS/defaults/profile'))    
         
+        if not os.path.exists(binary):
+            raise Exception("Binary path does not exist "+binary)
+        
         if profile is None and not hasattr(self, "profile"):
             self.profile = self.profile_class()
         elif profile is not None:
@@ -534,6 +537,8 @@ class CLI(object):
             runner.wait()
         except KeyboardInterrupt:
             runner.stop()
+        
+        runner.profile.cleanup()
         
 def cli():
     CLI().run()        
