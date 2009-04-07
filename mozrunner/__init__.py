@@ -354,6 +354,9 @@ class Runner(object):
             if profile is None:
                 self.profile = self.profile_class(os.path.join(binary, 
                                                   'Contents/MacOS/defaults/profile'))    
+        else:
+            self.binary = binary
+        
         
         if not os.path.exists(self.binary):
             raise Exception("Binary path does not exist "+self.binary)
