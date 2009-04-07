@@ -164,7 +164,7 @@ class Profile(object):
             
         if profile is not None and create_new is True:
             raise Exception('You cannot set the profie location is you want mozrunner to create a new on for you.')
-        if create_new is False and default_profile is None:
+        if create_new is False and profile is None:
             raise Exception('If you set create_new to False you must provide the location of the profile you would like to run')
         if create_new is True:
             if default_profile is None:
