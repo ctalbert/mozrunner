@@ -355,8 +355,8 @@ class Runner(object):
                 self.profile = self.profile_class(os.path.join(binary, 
                                                   'Contents/MacOS/defaults/profile'))    
         
-        if not os.path.exists(binary):
-            raise Exception("Binary path does not exist "+binary)
+        if not os.path.exists(self.binary):
+            raise Exception("Binary path does not exist "+self.binary)
         
         if profile is None and not hasattr(self, "profile"):
             self.profile = self.profile_class()
