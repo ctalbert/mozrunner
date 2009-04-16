@@ -174,7 +174,6 @@ class Profile(object):
             self.install_plugin(plugin)
     
         self.set_preferences(self.preferences)
-        print self.profile
     
     def find_default_profile(self):
         """Finds the default profile on the local system for self.names"""
