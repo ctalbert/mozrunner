@@ -174,6 +174,7 @@ class Profile(object):
             self.install_plugin(plugin)
     
         self.set_preferences(self.preferences)
+        print self.profile
     
     def find_default_profile(self):
         """Finds the default profile on the local system for self.names"""
@@ -252,6 +253,8 @@ class Profile(object):
                 if name.endswith('/'):
                     makedirs(os.path.join(tmpdir, name))
                 else:
+                    if not os.path.isdir(os.path.dirname(os.path.join(tmpdir, name))):
+                        makedirs(os.path.dirname(os.path.join(tmpdir, name)))
                     data = compressed_file.read(name)
                     f = open(os.path.join(tmpdir, name), 'w')
                     f.write(data) ; f.close()
@@ -260,17 +263,24 @@ class Profile(object):
         tree = ElementTree.ElementTree(file=os.path.join(plugin, 'install.rdf'))
         # description_element = 
         # tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description/')
-
-        about = [e for e in tree.findall(
-                    './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
-                     e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') ==             
-                     'urn:mozilla:install-manifest'
-                ]
-        if len(about) is 0:
-            plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
-            plugin_id = plugin_element.text
+        
+        desc = tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')
+        if desc and desc.attrib.has_key('{http://www.mozilla.org/2004/em-rdf#}id'):
+            plugin_id = desc.attrib['{http://www.mozilla.org/2004/em-rdf#}id']
         else:
-            plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
+            about = [e for e in tree.findall(
+                        './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
+                         e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') ==             
+                         'urn:mozilla:install-manifest'
+                    ]
+        
+            x = e.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')        
+        
+            if len(about) is 0:
+                plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
+                plugin_id = plugin_element.text
+            else:
+                plugin_id = about[0].get('{http://www.mozilla.org/2004/em-rdf#}id')
 
         plugin_path = os.path.join(self.profile, 'extensions', plugin_id)
         copytree(plugin, plugin_path, preserve_symlinks=1)
