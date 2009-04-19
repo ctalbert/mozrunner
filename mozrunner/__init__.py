@@ -337,7 +337,7 @@ class FirefoxProfile(Profile):
             return ['firefox', 'minefield', 'shiretoko']
         if sys.platform == 'linux2':
             return ['firefox', 'mozilla-firefox', 'iceweasel']
-        if os.name == 'nt' or sys.platfrom == 'cygwin':
+        if os.name == 'nt' or sys.platform == 'cygwin':
             return ['firefox']
 
 class ThunderbirdProfile(Profile):
@@ -470,7 +470,7 @@ class FirefoxRunner(Runner):
             return ['firefox', 'minefield', 'shiretoko']
         if sys.platform == 'linux2':
             return ['firefox', 'mozilla-firefox', 'iceweasel']
-        if os.name == 'nt' or sys.platfrom == 'cygwin':
+        if os.name == 'nt' or sys.platform == 'cygwin':
             return ['firefox']
 
 class ThunderbirdRunner(Runner):
