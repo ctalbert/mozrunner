@@ -5,12 +5,12 @@ Summary: Reliable start/stop/configuration of Mozilla Applications (Firefox, Thu
 Home-page: http://code.google.com/p/mozrunner/
 Author: Mozilla, Mikeal Rogers
 Author-email: mikeal.rogers@gmail.com
-License: http://www.apache.org/licenses/LICENSE-2.0
+License: MPL 1.1/GPL 2.0/LGPL 2.1
 Description: Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)
 Platform: Any
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: Apache Software License
+Classifier: License :: OSI Approved :: Mozilla Public License 1.1 (MPL 1.1)
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
