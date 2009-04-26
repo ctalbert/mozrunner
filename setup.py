@@ -57,7 +57,7 @@ setup(name=PACKAGE_NAME,
       author='Mozilla, Mikeal Rogers',
       author_email='mikeal.rogers@gmail.com',
       url='http://code.google.com/p/mozrunner/',
-      license='http://www.apache.org/licenses/LICENSE-2.0',
+      license='MPL 1.1/GPL 2.0/LGPL 2.1',
       packages=find_packages(),
       entry_points="""
           [console_scripts]
@@ -68,7 +68,7 @@ setup(name=PACKAGE_NAME,
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
                    'Intended Audience :: Developers',
-                   'License :: OSI Approved :: Apache Software License',
+                   'License :: OSI Approved :: MPL 1.1/GPL 2.0/LGPL 2.1',
                    'Operating System :: OS Independent',
                    'Topic :: Software Development :: Libraries :: Python Modules',
                   ]
