@@ -122,7 +122,9 @@ def kill_process_by_name(name):
             except OSError: pass
             sleep(.5)
             if len(get_pids(name)) is not 0:
-                os.kill(pid, signal.SIGKILL)
+                try:
+                    os.kill(pid, signal.SIGKILL)
+                except OSError: pass
                 sleep(.5)
                 if len(get_pids(name)) is not 0:
                     logger.error('Could not kill process')
