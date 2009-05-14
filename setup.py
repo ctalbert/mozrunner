@@ -20,6 +20,7 @@
 #
 # Contributor(s):
 #  Mikeal Rogers <mikeal.rogers@gmail.com>
+#  Domen Kozar <domen@dev.si>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -48,6 +49,8 @@ deps = ['simplesettings >= 0.3']
 
 if not sys.version.startswith('2.6'):
     deps.append('simplejson')
+if sys.version.startswith('2.4'):
+    deps.append('elementtree')
 
 setup(name=PACKAGE_NAME,
       version=PACKAGE_VERSION,

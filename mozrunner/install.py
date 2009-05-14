@@ -20,6 +20,7 @@
 #
 # Contributor(s):
 #  Mikeal Rogers <mikeal.rogers@gmail.com>
+#  Domen Kozar <domen@dev.si>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,7 +46,10 @@ import shutil
 import tempfile
 import zipfile
 from time import sleep
-from xml.etree import ElementTree
+try:
+    from xml.etree import ElementTree
+except ImportError:
+    import elementtree as ElementTree
 
 from distutils import dir_util
 copytree = dir_util.copy_tree
