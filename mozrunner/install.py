@@ -49,7 +49,7 @@ from time import sleep
 try:
     from xml.etree import ElementTree
 except ImportError:
-    import elementtree as ElementTree
+    from elementtree import ElementTree
 
 from distutils import dir_util
 copytree = dir_util.copy_tree
