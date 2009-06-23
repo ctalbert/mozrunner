@@ -43,7 +43,7 @@ desc = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Th
 summ = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)"""
 
 PACKAGE_NAME = "mozrunner"
-PACKAGE_VERSION = "1.3.4"
+PACKAGE_VERSION = "1.3.5"
 
 deps = ['simplesettings >= 0.3']
 
