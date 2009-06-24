@@ -74,7 +74,7 @@ def findInPath(fileName, path=os.environ['PATH']):
                 return os.path.join(dir, fileName + ".exe")
     return None
 
-stdout = -1
+stdout = sys.stdout
 stderr = sys.stderr
 stdin = sys.stdin
 
@@ -96,7 +96,7 @@ def get_pids(name, minimun_pid=0):
 
     else:
         get_pids_cmd = ['ps', 'ax']
-        h = killableprocess.runCommand(get_pids_cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        h = killableprocess.runCommand(get_pids_cmd, stdout=stdout, universal_newlines=True)
         h.wait()
         data = h.stdout.readlines()
         pids = [int(line.split()[0]) for line in data if line.find(name) is not -1]
