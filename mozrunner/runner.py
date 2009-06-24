@@ -54,7 +54,7 @@ stdout_wrap = StringIO()
 
 def run_command(cmd, env=None):
     """Run the given command in killable process."""
-    kwargs = {'stdout':-1 ,'stderr':sys.stderr, 'stdin':sys.stdin}
+    kwargs = {'stdout':sys.stdout ,'stderr':sys.stderr, 'stdin':sys.stdin}
     
     if sys.platform != "win32":
         return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **kwargs)
@@ -70,7 +70,7 @@ def get_pids(name, minimun_pid=0):
     
     else:
         get_pids_cmd = ['ps', 'ax']
-        h = killableprocess.runCommand(get_pids_cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        h = killableprocess.runCommand(get_pids_cmd, stdout=sys.stdout, universal_newlines=True)
         h.wait()
         data = h.stdout.readlines()
         pids = [int(line.split()[0]) for line in data if line.find(name) is not -1]
