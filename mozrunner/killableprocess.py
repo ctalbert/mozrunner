@@ -213,9 +213,10 @@ class Popen(subprocess.Popen):
             elif sys.platform == 'darwin':
                 def group_wait():
                     try:
-                        while 1:
+                        count = 0
+                        while ((count * 2) <= timeout):
                             os.killpg(self.pid, signal.SIG_DFL)
-                            time.sleep(.5)
+                            time.sleep(.5); count += .5
                     except exceptions.OSError:
                         return self.returncode
                         
