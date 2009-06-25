@@ -88,6 +88,15 @@ def run_command(cmd, env=None, **kwargs):
     else:
         return killableprocess.Popen(cmd, **killable_kwargs)
 
+def getoutput(l):
+    tmp = tempfile.mktemp()
+    x = open(tmp, 'w')
+    subprocess.call(l, stdout=x, stderr=x)
+    x.close(); x = open(tmp, 'r')
+    r = x.read() ; x.close()
+    os.remove(tmp)
+    return r
+
 def get_pids(name, minimun_pid=0):
     """Get all the pids matching name, exclude any pids below minimum_pid."""
     if os.name == 'nt' or sys.platform == 'cygwin':
@@ -95,10 +104,11 @@ def get_pids(name, minimun_pid=0):
         pids = win32pdhutil.FindPerformanceAttributesByName(name)
 
     else:
-        get_pids_cmd = ['ps', 'ax']
-        h = killableprocess.runCommand(get_pids_cmd, stdout=subprocess.PIPE, universal_newlines=True)
-        h.wait()
-        data = h.stdout.readlines()
+        # get_pids_cmd = ['ps', 'ax']
+        # h = killableprocess.runCommand(get_pids_cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        # h.wait(group=False)
+        # data = h.stdout.readlines()
+        data = getoutput(['ps', 'ax']).splitlines()
         pids = [int(line.split()[0]) for line in data if line.find(name) is not -1]
 
     matching_pids = [m for m in pids if m > minimun_pid]
