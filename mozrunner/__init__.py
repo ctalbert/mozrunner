@@ -86,7 +86,7 @@ def run_command(cmd, env=None, **kwargs):
     if sys.platform != "win32":
         return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **killable_kwargs)
     else:
-        return killableprocess.Popen(cmd, **killable_kwargs)
+        return killableprocess.Popen(cmd, env=env, **killable_kwargs)
 
 def getoutput(l):
     tmp = tempfile.mktemp()
