@@ -155,11 +155,6 @@ class Popen(subprocess.Popen):
             if errwrite is not None:
                 errwrite.Close()
             time.sleep(.1)
-            p = winprocess.QueryInformationJobObject(self._job, 8)['BasicInfo']['ActiveProcesses']
-            if p is 0:
-                self._job_working = False
-            else:
-                self._job_working = True
 
     def kill(self, group=True):
         """Kill the process. If group=True, all sub-processes will also be killed."""
