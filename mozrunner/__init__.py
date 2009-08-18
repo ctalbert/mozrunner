@@ -225,10 +225,16 @@ class Profile(object):
         if os.name == 'nt' or sys.platform == 'cygwin':
             for name in reversed(self.names):
                 bin = findInPath(name)
+                
+                if sys.platform == 'cygwin':
+                    program_files = os.environ['PROGRAMFILES']
+                else:
+                    program_files = os.environ['ProgramFiles']
+                
                 if bin is None:
-                    for bin in [os.path.join(os.environ['ProgramFiles'], 
+                    for bin in [os.path.join(program_files, 
                                                   'Mozilla Firefox', 'firefox.exe'),
-                                os.path.join(os.environ['ProgramFiles'], 
+                                os.path.join(program_files, 
                                                   'Mozilla Firefox3', 'firefox.exe'),
                                 ]:
                         if os.path.isfile(bin):
@@ -407,11 +413,14 @@ class Runner(object):
         elif os.name == 'nt' or sys.platform == 'cygwin':
             for name in reversed(self.names):
                 binary = findInPath(name)
+                if sys.platform == 'cygwin':
+                    program_files = os.environ['PROGRAMFILES']
+                else:
+                    program_files = os.environ['ProgramFiles']
+                
                 if binary is None:
-                    for bin in [os.path.join(os.environ['ProgramFiles'], 
-                                                  'Mozilla Firefox', 'firefox.exe'),
-                                os.path.join(os.environ['ProgramFiles'], 
-                                                  'Mozilla Firefox3', 'firefox.exe'),
+                    for bin in [program_files, 'Mozilla Firefox', 'firefox.exe'),
+                                program_files, 'Mozilla Firefox3', 'firefox.exe'),
                                 ]:
                         if os.path.isfile(bin):
                             binary = bin
