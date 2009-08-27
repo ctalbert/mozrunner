@@ -419,8 +419,8 @@ class Runner(object):
                     program_files = os.environ['ProgramFiles']
                 
                 if binary is None:
-                    for bin in [program_files, 'Mozilla Firefox', 'firefox.exe'),
-                                program_files, 'Mozilla Firefox3', 'firefox.exe'),
+                    for bin in [(program_files, 'Mozilla Firefox', 'firefox.exe'),
+                                (program_files, 'Mozilla Firefox3', 'firefox.exe'),
                                 ]:
                         if os.path.isfile(bin):
                             binary = bin
