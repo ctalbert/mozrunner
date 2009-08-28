@@ -1,3 +1,38 @@
+.. mozrunner documentation master file
+
+mozrunner -- Reliable start/stop/configuration of Mozilla Applications
+==========================================
+
+.. toctree::
+   :maxdepth: 3
+
+.. _installation:
+
+Installation
+------------
+
+`mozrunner` requires `setuptools <http://http://pypi.python.org/pypi/setuptools>`_. If you do not have them installed already you will want to::
+
+   $ curl -O http://peak.telecommunity.com/dist/ez_setup.py
+   $ python ez_setup.py
+
+If you are running Python 2.5 or earlier you will also need simplejson.
+
+   $ easy_install simplejson
+   
+On Windows you will also need pywin32 which can be downloaded `here <http://sourceforge.net/projects/pywin32/>`_.
+
+Now you can install mozrunner::
+
+   $ easy_install mozrunner
+
+The source code is publicly `available on github <http://github.com/mikeal/mozrunner>`_. 
+
+.. Tickets should be logged on the `github issues tracker <http://github.com/mikeal/couchquery/issues>`_. 
+
+The process for code contributions is for users to `fork the repository on github <http://help.github.com/forking/>`_, push modifications to their public fork, and then send `mikeal <http://github.com/mikeal>`_ a `pull request <http://github.com/guides/pull-requests>`_.
+
+
 :mod:`mozrunner` --- Reliable start/stop/configuration of Mozilla Applications
 ==============================================================================
 

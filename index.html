@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>mozrunner — Reliable start/stop/configuration of Mozilla Applications &mdash; mozrunner v2.0a1 documentation</title>
+    <title>mozrunner – Reliable start/stop/configuration of Mozilla Applications &mdash; mozrunner v2.0a1 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -40,7 +40,28 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-mozrunner">
+  <div class="section" id="mozrunner-reliable-start-stop-configuration-of-mozilla-applications">
+<h1>mozrunner &#8211; Reliable start/stop/configuration of Mozilla Applications<a class="headerlink" href="#mozrunner-reliable-start-stop-configuration-of-mozilla-applications" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+</ul>
+<div class="section" id="installation">
+<span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><cite>mozrunner</cite> requires <a class="reference external" href="http://http://pypi.python.org/pypi/setuptools">setuptools</a>. If you do not have them installed already you will want to:</p>
+<div class="highlight-python"><pre>$ curl -O http://peak.telecommunity.com/dist/ez_setup.py
+$ python ez_setup.py</pre>
+</div>
+<p>If you are running Python 2.5 or earlier you will also need simplejson.</p>
+<blockquote>
+$ easy_install simplejson</blockquote>
+<p>On Windows you will also need pywin32 which can be downloaded <a class="reference external" href="http://sourceforge.net/projects/pywin32/">here</a>.</p>
+<p>Now you can install mozrunner:</p>
+<div class="highlight-python"><pre>$ easy_install mozrunner</pre>
+</div>
+<p>The source code is publicly <a class="reference external" href="http://github.com/mikeal/mozrunner">available on github</a>. .. Tickets should be logged on the <a class="reference external" href="http://github.com/mikeal/couchquery/issues">github issues tracker</a>.</p>
+<p>The process for code contributions is for users to <a class="reference external" href="http://help.github.com/forking/">fork the repository on github</a>, push modifications to their public fork, and then send <a class="reference external" href="http://github.com/mikeal">mikeal</a> a <a class="reference external" href="http://github.com/guides/pull-requests">pull request</a>.</p>
+</div>
+</div>
+<div class="section" id="module-mozrunner">
 <h1><tt class="xref docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Reliable start/stop/configuration of Mozilla Applications<a class="headerlink" href="#module-mozrunner" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="profile-handling-and-modification">
 <h2>Profile Handling and Modification<a class="headerlink" href="#profile-handling-and-modification" title="Permalink to this headline">¶</a></h2>
@@ -373,7 +394,11 @@ is responsible for setting this attribute before calling <a title="mozrunner.CLI
         <div class="sphinxsidebarwrapper">
             <h3><a href="">Table Of Contents</a></h3>
             <ul>
-<li><a class="reference external" href=""><tt class="docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Reliable start/stop/configuration of Mozilla Applications</a><ul>
+<li><a class="reference external" href="">mozrunner &#8211; Reliable start/stop/configuration of Mozilla Applications</a><ul>
+<li><a class="reference external" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#module-mozrunner"><tt class="docutils literal"><span class="pre">mozrunner</span></tt> &#8212; Reliable start/stop/configuration of Mozilla Applications</a><ul>
 <li><a class="reference external" href="#profile-handling-and-modification">Profile Handling and Modification</a></li>
 <li><a class="reference external" href="#process-run-and-environment-handling-and-discovery">Process Run and Environment Handling and Discovery</a></li>
 <li><a class="reference external" href="#command-line-customization-and-modification">Command Line Customization and Modification</a></li>
