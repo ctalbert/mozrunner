@@ -1,7 +1,7 @@
 .. mozrunner documentation master file
 
 mozrunner -- Reliable start/stop/configuration of Mozilla Applications
-==========================================
+======================================================================
 
 .. toctree::
    :maxdepth: 3
