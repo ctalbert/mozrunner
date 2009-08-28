@@ -203,7 +203,10 @@ class Popen(subprocess.Popen):
         else:
             if sys.platform == 'linux2':
                 def group_wait():
-                    os.waitpid(self.pid, 0)
+                    try:
+                        os.waitpid(self.pid, 0)
+                    except OSError, e:
+                        pass # If wait has already been called on this pid, bad things happen
                     return self.returncode
             elif sys.platform == 'darwin':
                 def group_wait():
