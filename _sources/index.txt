@@ -26,7 +26,9 @@ Now you can install mozrunner::
 
    $ easy_install mozrunner
 
-The source code is publicly `available on github <http://github.com/mikeal/mozrunner>`_. .. Tickets should be logged on the `github issues tracker <http://github.com/mikeal/couchquery/issues>`_. 
+The source code is publicly `available on github <http://github.com/mikeal/mozrunner>`_. 
+
+.. Tickets should be logged on the `github issues tracker <http://github.com/mikeal/couchquery/issues>`_. 
 
 The process for code contributions is for users to `fork the repository on github <http://help.github.com/forking/>`_, push modifications to their public fork, and then send `mikeal <http://github.com/mikeal>`_ a `pull request <http://github.com/guides/pull-requests>`_.
 

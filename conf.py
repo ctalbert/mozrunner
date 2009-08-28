@@ -31,7 +31,7 @@ extensions = ["sphinx.ext.intersphinx"]
 intersphinx_mapping = {'http://docs.python.org/dev': None}
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
