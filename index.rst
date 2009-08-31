@@ -16,7 +16,7 @@ Installation
    $ curl -O http://peak.telecommunity.com/dist/ez_setup.py
    $ python ez_setup.py
 
-If you are running Python 2.5 or earlier you will also need simplejson.
+If you are running Python 2.5 or earlier you will also need simplejson.::
 
    $ easy_install simplejson
    
