@@ -56,7 +56,7 @@ setup(name=PACKAGE_NAME,
       long_description=summ,
       author='Mozilla, Mikeal Rogers',
       author_email='mikeal.rogers@gmail.com',
-      url='http://code.google.com/p/mozrunner/',
+      url='http://mikeal.github.com/mozrunner/',
       license='MPL 1.1/GPL 2.0/LGPL 2.1',
       packages=find_packages(exclude=['legacy']),
       entry_points="""
