@@ -42,7 +42,7 @@ desc = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Th
 summ = """Reliable start/stop/configuration of Mozilla Applications (Firefox, Thunderbird, etc.)"""
 
 PACKAGE_NAME = "mozrunner"
-PACKAGE_VERSION = "2.0"
+PACKAGE_VERSION = "2.1"
 
 deps = []
 
@@ -54,7 +54,7 @@ setup(name=PACKAGE_NAME,
       description=desc,
       summary=summ,
       long_description=summ,
-      author='Mozilla, Mikeal Rogers',
+      author='Mikeal Rogers, Mozilla',
       author_email='mikeal.rogers@gmail.com',
       url='http://mikeal.github.com/mozrunner/',
       license='MPL 1.1/GPL 2.0/LGPL 2.1',
