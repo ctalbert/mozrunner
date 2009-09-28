@@ -164,12 +164,13 @@ class Profile(object):
     """Handles all operations regarding profile. Created new profiles, installs extensions,
     sets preferences and handles cleanup."""
     def __init__(self, default_profile=None, profile=None, create_new=True, 
-                 plugins=[], preferences={}):
+                 plugins=[], preferences={}, binary=None):
         self.plugins_installed = []
         self.default_profile = default_profile
         self.profile = profile
         self.create_new = create_new
         self.plugins = plugins
+        self.binary = binary
         if not hasattr(self, 'preferences'):
             self.preferences = preferences
         else:
@@ -257,9 +258,19 @@ class Profile(object):
                 login = pwd.getpwuid(os.geteuid())[0]
             print commands.getoutput('chown -R %s:%s %s' % (login, login, profile))
             
-        if os.path.exists(profile) is True:
-            shutil.rmtree(profile)
-        copytree(default_profile, profile, preserve_symlinks=1)
+        if self.binary is None:
+            if os.path.exists(profile) is True:
+                shutil.rmtree(profile)
+            copytree(default_profile, profile, preserve_symlinks=1)
+        else:
+            # Then let's use the typical way to create a profile
+            if os.path.exists(profile) is True:
+                shutil.rmtree(profile)
+            args = self.binary + ' -CreateProfile "mozmillprofile ' + profile + '"'
+            print ("THIS IS THE ARGS: " + args)
+            p = subprocess.Popen(args, shell=True)
+            p.wait()
+            
         return profile
         
     def install_plugin(self, plugin):
@@ -308,7 +319,11 @@ class Profile(object):
     def set_preferences(self, preferences):
         """Adds preferences dict to profile preferences"""
         prefs_file = os.path.join(self.profile, 'user.js')
-        f = open(prefs_file, 'a+')
+        # Ensure that the file exists first otherwise create an empty file
+        if os.path.isfile(prefs_file):
+            f = open(prefs_file, 'a+')
+        else:
+            f = open(prefs_file, 'w')
         f.write('\n#MozRunner Prefs Start\n')
 
         pref_lines = ['user_pref(%s, %s);' % 
@@ -450,6 +465,8 @@ class Runner(object):
         
     def start(self):
         """Run self.command in the proper environment."""
+        print "RUNNING COMMAND: ",
+        print self.command + self.cmdargs
         self.process_handler = run_command(self.command+self.cmdargs, self.env, **self.kp_kwargs)
 
     def wait(self, timeout=None):
@@ -541,7 +558,7 @@ class CLI(object):
             plugins = self.options.plugins.split(',')
         profile = self.get_profile(default_profile=options.default_profile, 
                                    profile=options.profile, create_new=options.create_new,
-                                   plugins=plugins)
+                                   plugins=plugins, binary=self.options.binary)
         
         runner = self.get_runner(binary=self.options.binary, 
                                  profile=profile)
@@ -549,9 +566,9 @@ class CLI(object):
         return runner
 
     def get_profile(self, default_profile=None, profile=None, create_new=None, plugins=[],
-                    preferences={}):
+                    preferences={}, binary=None):
         """Returns the profile instance for the given command line arguments."""    
-        return self.profile_class(default_profile, profile, create_new, plugins, preferences)
+        return self.profile_class(default_profile, profile, create_new, plugins, preferences, binary)
         
     def get_runner(self, binary=None, profile=None):
         """Returns the runner instance for the given command line binary arguemt
