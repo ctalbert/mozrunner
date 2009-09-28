@@ -465,8 +465,6 @@ class Runner(object):
         
     def start(self):
         """Run self.command in the proper environment."""
-        print "RUNNING COMMAND: ",
-        print self.command + self.cmdargs
         self.process_handler = run_command(self.command+self.cmdargs, self.env, **self.kp_kwargs)
 
     def wait(self, timeout=None):
