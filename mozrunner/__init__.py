@@ -248,13 +248,12 @@ class Profile(object):
         """Creates a new clean profile in tmp"""
         profile = tempfile.mkdtemp(suffix='.mozrunner')
         uid = str(uuid.uuid1())
-        from StringIO import StringIO
-        class O(StringIO):
-            fileno = lambda self: 1
-        o = O()
-        subprocess.call([binary, '-CreateProfile', profile], stdout=o, stderr=o)
         
-        raise Exception('done '+profile)
+        if os.path.exists(profile) is True:
+            shutil.rmtree(profile)
+        cmd = self.binary + ' -CreateProfile "'+uid+' ' + profile + '"'    
+        subprocess.call(cmd, shell=True)
+        return profile
         
         # if sys.platform == 'linux2':
         #     try:
@@ -314,7 +313,12 @@ class Profile(object):
     def set_preferences(self, preferences):
         """Adds preferences dict to profile preferences"""
         prefs_file = os.path.join(self.profile, 'user.js')
-        f = open(prefs_file, 'a+')
+        # Ensure that the file exists first otherwise create an empty file
+        if os.path.isfile(prefs_file):
+            f = open(prefs_file, 'a+')
+        else:
+            f = open(prefs_file, 'w')
+        
         f.write('\n#MozRunner Prefs Start\n')
 
         pref_lines = ['user_pref(%s, %s);' % 
