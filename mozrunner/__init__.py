@@ -45,6 +45,7 @@ import zipfile
 import optparse
 import killableprocess
 import subprocess
+import uuid
 from xml.etree import ElementTree
 from distutils import dir_util
 from time import sleep
@@ -163,11 +164,10 @@ def makedirs(name):
 class Profile(object):
     """Handles all operations regarding profile. Created new profiles, installs extensions,
     sets preferences and handles cleanup."""
-    def __init__(self, default_profile=None, profile=None, create_new=True, 
-                 plugins=[], preferences={}):
+    def __init__(self, binary=None, profile=None, create_new=True, plugins=[], preferences={}):
         self.plugins_installed = []
-        self.default_profile = default_profile
         self.profile = profile
+        self.binary = binary
         self.create_new = create_new
         self.plugins = plugins
         if not hasattr(self, 'preferences'):
@@ -181,72 +181,70 @@ class Profile(object):
         if create_new is False and profile is None:
             raise Exception('If you set create_new to False you must provide the location of the profile you would like to run')
         if create_new is True:
-            if default_profile is None:
-                self.default_profile = self.find_default_profile()
-            self.profile = self.create_new_profile(self.default_profile) 
+            self.profile = self.create_new_profile(self.binary) 
         for plugin in plugins:
             self.install_plugin(plugin)
     
         self.set_preferences(self.preferences)
     
-    def find_default_profile(self):
-        """Finds the default profile on the local system for self.names"""
-        default_profile = None
+    # def find_default_profile(self):
+    #     """Finds the default profile on the local system for self.names"""
+    #     default_profile = None
+    #     
+    #     if sys.platform == 'linux2': 
+    #         # This is unfortunately hardcoded to work with Firefox
+    #         # the code is so hairy I'm just affraid to generalize it or port it
+    #         # knowing that it's 99% functional for Firefox.
+    #         for path, name in (('/opt', 'firefox',),
+    #                            ('/usr/lib', 'iceweasel',),
+    #                            ('/usr/share', 'firefox',),
+    #                            ('/usr/lib/', 'mozilla-firefox',),
+    #                            ('/usr/lib/', 'firefox',),
+    #                            ):
+    #             if os.path.isdir(path):
+    #                 profiles = sorted([d for d in os.listdir(os.path.join(path)) if (
+    #                     d.startswith(name) ) and 
+    #                     ( os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) ) and
+    #                     ( ('-' not in d) or ( len(name+'-') <= len(d) and not 
+    #                         NaN(d[len(name+'-')]) or
+    #                     (d == 'mozilla-firefox')) )
+    #                     ])
+    #                 if len(profiles) > 0:
+    #                     default_profile = os.path.join(path, profiles[-1], 'defaults', 'profile') 
+    #     if sys.platform == 'darwin':
+    #         for name in reversed(self.names):
+    #             appdir = os.path.join('Applications', name.capitalize()+'.app')
+    #             if os.path.isdir(os.path.join(os.path.expanduser('~/'), appdir)):
+    #                 appdir = os.path.join(os.path.expanduser('~/'), appdir)
+    #                 default_profile = os.path.join(appdir, 'Contents/MacOS/defaults/profile')
+    #             elif os.path.isdir('/'+appdir):
+    #                 default_profile = os.path.join('/'+appdir, 
+    #                                                'Contents/MacOS/defaults/profile')
+    #     if os.name == 'nt' or sys.platform == 'cygwin':
+    #         for name in reversed(self.names):
+    #             bin = findInPath(name)
+    #             
+    #             if sys.platform == 'cygwin':
+    #                 program_files = os.environ['PROGRAMFILES']
+    #             else:
+    #                 program_files = os.environ['ProgramFiles']
+    #             
+    #             if bin is None:
+    #                 for bin in [os.path.join(program_files, 
+    #                                               'Mozilla Firefox', 'firefox.exe'),
+    #                             os.path.join(program_files, 
+    #                                               'Mozilla Firefox3', 'firefox.exe'),
+    #                             ]:
+    #                     if os.path.isfile(bin):
+    #                         break
+    #             if bin is not None and os.path.isfile(bin):
+    #                 default_profile = os.path.join(os.path.dirname(bin), 
+    #                                                'defaults', 'profile')
+    #     if default_profile is None:
+    #         raise Exception('Could not locate default profile, please set.')
+    #     return default_profile
         
-        if sys.platform == 'linux2': 
-            # This is unfortunately hardcoded to work with Firefox
-            # the code is so hairy I'm just affraid to generalize it or port it
-            # knowing that it's 99% functional for Firefox.
-            for path, name in (('/opt', 'firefox',),
-                               ('/usr/lib', 'iceweasel',),
-                               ('/usr/share', 'firefox',),
-                               ('/usr/lib/', 'mozilla-firefox',),
-                               ('/usr/lib/', 'firefox',),
-                               ):
-                if os.path.isdir(path):
-                    profiles = sorted([d for d in os.listdir(os.path.join(path)) if (
-                        d.startswith(name) ) and 
-                        ( os.path.isdir(os.path.join(path, d, 'defaults', 'profile')) ) and
-                        ( ('-' not in d) or ( len(name+'-') <= len(d) and not 
-                            NaN(d[len(name+'-')]) or
-                        (d == 'mozilla-firefox')) )
-                        ])
-                    if len(profiles) > 0:
-                        default_profile = os.path.join(path, profiles[-1], 'defaults', 'profile') 
-        if sys.platform == 'darwin':
-            for name in reversed(self.names):
-                appdir = os.path.join('Applications', name.capitalize()+'.app')
-                if os.path.isdir(os.path.join(os.path.expanduser('~/'), appdir)):
-                    appdir = os.path.join(os.path.expanduser('~/'), appdir)
-                    default_profile = os.path.join(appdir, 'Contents/MacOS/defaults/profile')
-                elif os.path.isdir('/'+appdir):
-                    default_profile = os.path.join('/'+appdir, 
-                                                   'Contents/MacOS/defaults/profile')
-        if os.name == 'nt' or sys.platform == 'cygwin':
-            for name in reversed(self.names):
-                bin = findInPath(name)
-                
-                if sys.platform == 'cygwin':
-                    program_files = os.environ['PROGRAMFILES']
-                else:
-                    program_files = os.environ['ProgramFiles']
-                
-                if bin is None:
-                    for bin in [os.path.join(program_files, 
-                                                  'Mozilla Firefox', 'firefox.exe'),
-                                os.path.join(program_files, 
-                                                  'Mozilla Firefox3', 'firefox.exe'),
-                                ]:
-                        if os.path.isfile(bin):
-                            break
-                if bin is not None and os.path.isfile(bin):
-                    default_profile = os.path.join(os.path.dirname(bin), 
-                                                   'defaults', 'profile')
-        if default_profile is None:
-            raise Exception('Could not locate default profile, please set.')
-        return default_profile
-        
-    def create_new_profile(self, default_profile):
+    def create_new_profile(self, binary):
         """Creates a new clean profile in tmp"""
         profile = tempfile.mkdtemp(suffix='.mozrunner')
         uid = str(uuid.uuid1())
@@ -256,6 +254,18 @@ class Profile(object):
         cmd = self.binary + ' -CreateProfile "'+uid+' ' + profile + '"'    
         subprocess.call(cmd, shell=True)
         return profile
+        
+        # if sys.platform == 'linux2':
+        #     try:
+        #         login = os.getlogin()
+        #     except OSError:
+        #         login = pwd.getpwuid(os.geteuid())[0]
+        #     print commands.getoutput('chown -R %s:%s %s' % (login, login, profile))
+        #     
+        # if os.path.exists(profile) is True:
+        #     shutil.rmtree(profile)
+        # copytree(default_profile, profile, preserve_symlinks=1)
+        # return profile
         
     def install_plugin(self, plugin):
         """Installs the given plugin path in the profile."""
@@ -380,9 +390,7 @@ class Runner(object):
             self.binary = self.find_binary()
         elif binary.endswith('.app'):
             self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
-            if profile is None:
-                self.profile = self.profile_class(os.path.join(binary, 
-                                                  'Contents/MacOS/defaults/profile'))    
+            self.profile = self.profile_class(binary=self.binary)    
         else:
             self.binary = binary
         
@@ -390,10 +398,7 @@ class Runner(object):
         if not os.path.exists(self.binary):
             raise Exception("Binary path does not exist "+self.binary)
         
-        if profile is None and not hasattr(self, "profile"):
-            self.profile = self.profile_class()
-        elif profile is not None:
-            self.profile = profile
+        self.profile = profile
         
         self.cmdargs = cmdargs
         if env is None:
@@ -450,6 +455,8 @@ class Runner(object):
         
     def start(self):
         """Run self.command in the proper environment."""
+        if self.profile is None:
+            self.profile = self.profile_class()
         self.process_handler = run_command(self.command+self.cmdargs, self.env, **self.kp_kwargs)
 
     def wait(self, timeout=None):
@@ -507,9 +514,9 @@ class CLI(object):
     
     parser_options = {("-b", "--binary",): dict(dest="binary", help="Binary path.", 
                                                 metavar=None, default=None),
-                      ("-d", "--default-profile",): dict(dest="default_profile",
-                                                         help="Default profile path.", 
-                                                         metavar=None, default=None),
+                      # ("-d", "--default-profile",): dict(dest="default_profile",
+                      #                                    help="Default profile path.", 
+                      #                                    metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.", 
                                                  metavar=None, default=None),
                       ('-w', "--plugins",): dict(dest="plugins", 
@@ -539,19 +546,19 @@ class CLI(object):
             plugins = []
         else:
             plugins = self.options.plugins.split(',')
-        profile = self.get_profile(default_profile=options.default_profile, 
+
+        runner = self.get_runner(binary=self.options.binary)
+        
+        profile = self.get_profile(binary=runner.binary, 
                                    profile=options.profile, create_new=options.create_new,
                                    plugins=plugins)
-        
-        runner = self.get_runner(binary=self.options.binary, 
-                                 profile=profile)
-        
+        runner.profile = profile
         return runner
 
-    def get_profile(self, default_profile=None, profile=None, create_new=None, plugins=[],
+    def get_profile(self, binary=None, profile=None, create_new=None, plugins=[],
                     preferences={}):
-        """Returns the profile instance for the given command line arguments."""    
-        return self.profile_class(default_profile, profile, create_new, plugins, preferences)
+        """Returns the profile instance for the given command line arguments."""
+        return self.profile_class(binary, profile, create_new, plugins, preferences)
         
     def get_runner(self, binary=None, profile=None):
         """Returns the runner instance for the given command line binary arguemt
