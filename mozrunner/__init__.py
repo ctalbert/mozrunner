@@ -321,7 +321,6 @@ class Runner(object):
             self.binary = self.find_binary()
         elif binary.endswith('.app'):
             self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
-            # self.profile = self.profile_class(binary=self.binary)    
         else:
             self.binary = binary
         
