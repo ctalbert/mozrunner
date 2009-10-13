@@ -177,7 +177,7 @@ class Profile(object):
             self.preferences.update(preferences)
             
         if profile is not None and create_new is True:
-            raise Exception('You cannot set the profie location is you want mozrunner to create a new on for you.')
+            raise Exception('You cannot set the profie location if you want mozrunner to create a new one for you.')
         if create_new is False and profile is None:
             raise Exception('If you set create_new to False you must provide the location of the profile you would like to run')
         if create_new is True:
