@@ -52,7 +52,6 @@ if not sys.version.startswith('2.6'):
 setup(name=PACKAGE_NAME,
       version=PACKAGE_VERSION,
       description=desc,
-      summary=summ,
       long_description=summ,
       author='Mikeal Rogers, Mozilla',
       author_email='mikeal.rogers@gmail.com',
