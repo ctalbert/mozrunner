@@ -20,6 +20,8 @@
 #
 # Contributor(s):
 #  Mikeal Rogers <mikeal.rogers@gmail.com>
+#  Clint Talbert <ctalbert@mozilla.com>
+#  Henrik Skupin <hskupin@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,7 +47,6 @@ import zipfile
 import optparse
 import killableprocess
 import subprocess
-import uuid
 from xml.etree import ElementTree
 from distutils import dir_util
 from time import sleep
@@ -85,7 +86,8 @@ def run_command(cmd, env=None, **kwargs):
     killable_kwargs.update(kwargs)
 
     if sys.platform != "win32":
-        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0), env=env, **killable_kwargs)
+        return killableprocess.Popen(cmd, preexec_fn=lambda : os.setpgid(0, 0),
+                                     env=env, **killable_kwargs)
     else:
         return killableprocess.Popen(cmd, env=env, **killable_kwargs)
 
@@ -175,29 +177,27 @@ class Profile(object):
         else:
             self.preferences = copy.copy(self.preferences)
             self.preferences.update(preferences)
-            
+
         if profile is not None and create_new is True:
             raise Exception('You cannot set the profie location is you want mozrunner to create a new on for you.')
         if create_new is False and profile is None:
             raise Exception('If you set create_new to False you must provide the location of the profile you would like to run')
         if create_new is True:
-            self.profile = self.create_new_profile(self.binary) 
+            self.profile = self.create_new_profile(self.binary)
         for plugin in plugins:
             self.install_plugin(plugin)
-    
+
         self.set_preferences(self.preferences)
-        
+
     def create_new_profile(self, binary):
-        """Creates a new clean profile in tmp"""
+        """Create a new clean profile in tmp which is a simple empty folder"""
         profile = tempfile.mkdtemp(suffix='.mozrunner')
-        uid = str(uuid.uuid1())
-        
         if os.path.exists(profile) is True:
             shutil.rmtree(profile)
-        cmd = self.binary + ' -CreateProfile "'+uid+' ' + profile + '"'    
-        subprocess.call(cmd, shell=True)
+        makedirs(profile)
+
         return profile
-        
+
     def install_plugin(self, plugin):
         """Installs the given plugin path in the profile."""
         tmpdir = None
@@ -214,23 +214,23 @@ class Profile(object):
                     f = open(os.path.join(tmpdir, name), 'w')
                     f.write(data) ; f.close()
             plugin = tmpdir
-        
+
         tree = ElementTree.ElementTree(file=os.path.join(plugin, 'install.rdf'))
-        # description_element = 
+        # description_element =
         # tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description/')
-        
+
         desc = tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')
         if desc and desc.attrib.has_key('{http://www.mozilla.org/2004/em-rdf#}id'):
             plugin_id = desc.attrib['{http://www.mozilla.org/2004/em-rdf#}id']
         else:
             about = [e for e in tree.findall(
-                        './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if 
-                         e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') ==             
+                        './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if
+                         e.get('{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about') ==
                          'urn:mozilla:install-manifest'
                     ]
-        
-            x = e.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')        
-        
+
+            x = e.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')
+
             if len(about) is 0:
                 plugin_element = tree.find('.//{http://www.mozilla.org/2004/em-rdf#}id')
                 plugin_id = plugin_element.text
@@ -240,7 +240,7 @@ class Profile(object):
         plugin_path = os.path.join(self.profile, 'extensions', plugin_id)
         copytree(plugin, plugin_path, preserve_symlinks=1)
         self.plugins_installed.append(plugin_path)
-    
+
     def set_preferences(self, preferences):
         """Adds preferences dict to profile preferences"""
         prefs_file = os.path.join(self.profile, 'user.js')
@@ -249,30 +249,30 @@ class Profile(object):
             f = open(prefs_file, 'a+')
         else:
             f = open(prefs_file, 'w')
-        
+
         f.write('\n#MozRunner Prefs Start\n')
 
-        pref_lines = ['user_pref(%s, %s);' % 
-                      (simplejson.dumps(k), simplejson.dumps(v) ) for k, v in 
+        pref_lines = ['user_pref(%s, %s);' %
+                      (simplejson.dumps(k), simplejson.dumps(v) ) for k, v in
                        preferences.items()]
         for line in pref_lines:
             f.write(line+'\n')
         f.write('#MozRunner Prefs End\n')
         f.flush() ; f.close()
-        
+
     def clean_preferences(self):
         """Removed preferences added by mozrunner."""
         lines = open(os.path.join(self.profile, 'user.js'), 'r').read().splitlines()
         s = lines.index('#MozRunner Prefs Start') ; e = lines.index('#MozRunner Prefs End')
         cleaned_prefs = '\n'.join(lines[:s] + lines[e+1:])
-        f = open(os.path.join(self.profile, 'user.js'), 'w') 
+        f = open(os.path.join(self.profile, 'user.js'), 'w')
         f.write(cleaned_prefs) ; f.flush() ; f.close()
-        
+
     def clean_plugins(self):
         """Cleans up plugins in the profile."""
         for plugin in self.plugins_installed:
             shutil.rmtree(plugin)
-            
+
     def cleanup(self):
         """Cleanup operations on the profile."""
         if self.create_new:
@@ -280,7 +280,7 @@ class Profile(object):
         else:
             self.clean_preferences()
             self.clean_plugins()
-    
+
 
 class FirefoxProfile(Profile):
     """Specialized Profile subclass for Firefox"""
@@ -291,7 +291,7 @@ class FirefoxProfile(Profile):
                    'browser.warnOnQuit': False,
                    'browser.sessionstore.resume_from_crash': False,
                    }
-    
+
     @property
     def names(self):
         if sys.platform == 'darwin':
@@ -310,12 +310,12 @@ class ThunderbirdProfile(Profile):
                    'browser.sessionstore.resume_from_crash': False,
                    }
     names = ["thunderbird", "shredder"]
-        
+
 
 class Runner(object):
     """Handles all running operations. Finds bins, runs and kills the process."""
-    
-    def __init__(self, binary=None, profile=None, cmdargs=[], env=None, 
+
+    def __init__(self, binary=None, profile=None, cmdargs=[], env=None,
                  aggressively_kill=['crashreporter'], kp_kwargs={}):
         if binary is None:
             self.binary = self.find_binary()
@@ -323,22 +323,22 @@ class Runner(object):
             self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
         else:
             self.binary = binary
-        
-        
+
+
         if not os.path.exists(self.binary):
             raise Exception("Binary path does not exist "+self.binary)
-        
+
         self.profile = profile
-        
+
         self.cmdargs = cmdargs
         if env is None:
             self.env = copy.copy(os.environ)
-            self.env.update({'MOZ_NO_REMOTE':"1",}) 
-        else:    
+            self.env.update({'MOZ_NO_REMOTE':"1",})
+        else:
             self.env = env
         self.aggressively_kill = aggressively_kill
         self.kp_kwargs = kp_kwargs
-    
+
     def find_binary(self):
         """Finds the binary for self.names if one was not provided."""
         binary = None
@@ -352,7 +352,7 @@ class Runner(object):
                     program_files = os.environ['PROGRAMFILES']
                 else:
                     program_files = os.environ['ProgramFiles']
-                
+
                 if binary is None:
                     for bin in [(program_files, 'Mozilla Firefox', 'firefox.exe'),
                                 (program_files, 'Mozilla Firefox3', 'firefox.exe'),
@@ -364,11 +364,11 @@ class Runner(object):
             for name in reversed(self.names):
                 appdir = os.path.join('Applications', name.capitalize()+'.app')
                 if os.path.isdir(os.path.join(os.path.expanduser('~/'), appdir)):
-                    binary = os.path.join(os.path.expanduser('~/'), appdir, 
+                    binary = os.path.join(os.path.expanduser('~/'), appdir,
                                           'Contents/MacOS/'+name+'-bin')
                 elif os.path.isdir('/'+appdir):
                     binary = os.path.join("/"+appdir, 'Contents/MacOS/'+name+'-bin')
-                    
+
                 if binary is not None:
                     if not os.path.isfile(binary):
                         binary = binary.replace(name+'-bin', 'firefox-bin')
@@ -377,12 +377,12 @@ class Runner(object):
         if binary is None:
             raise Exception('Mozrunner could not locate your binary, you will need to set it.')
         return binary
-    
+
     @property
     def command(self):
         """Returns the command list to run."""
         return [self.binary, '-profile', self.profile.profile]
-        
+
     def start(self):
         """Run self.command in the proper environment."""
         if self.profile is None:
@@ -395,7 +395,7 @@ class Runner(object):
 
         if sys.platform != 'win32':
             for name in self.names:
-                for pid in get_pids(name, self.process_handler.pid):    
+                for pid in get_pids(name, self.process_handler.pid):
                     self.process_handler.pid = pid
                     self.process_handler.wait(timeout=timeout)
 
@@ -404,7 +404,7 @@ class Runner(object):
         if sys.platform != 'win32':
             self.process_handler.kill()
             for name in self.names:
-                for pid in get_pids(name, self.process_handler.pid):    
+                for pid in get_pids(name, self.process_handler.pid):
                     self.process_handler.pid = pid
                     self.process_handler.kill()
         else:
@@ -418,12 +418,12 @@ class Runner(object):
 
     def stop(self):
         self.kill()
-    
+
 class FirefoxRunner(Runner):
     """Specialized Runner subclass for running Firefox."""
-    
+
     profile_class = FirefoxProfile
-    
+
     @property
     def names(self):
         if sys.platform == 'darwin':
@@ -436,37 +436,37 @@ class FirefoxRunner(Runner):
 class ThunderbirdRunner(Runner):
     """Specialized Runner subclass for running Thunderbird"""
     profile_class = ThunderbirdProfile
-    
+
     names = ["thunderbird", "shredder"]
 
 class CLI(object):
-    """Command line interface."""                      
-    
-    parser_options = {("-b", "--binary",): dict(dest="binary", help="Binary path.", 
+    """Command line interface."""
+
+    parser_options = {("-b", "--binary",): dict(dest="binary", help="Binary path.",
                                                 metavar=None, default=None),
                       # ("-d", "--default-profile",): dict(dest="default_profile",
-                      #                                    help="Default profile path.", 
+                      #                                    help="Default profile path.",
                       #                                    metavar=None, default=None),
-                      ('-p', "--profile",): dict(dest="profile", help="Profile path.", 
+                      ('-p', "--profile",): dict(dest="profile", help="Profile path.",
                                                  metavar=None, default=None),
-                      ('-w', "--plugins",): dict(dest="plugins", 
-                                                 help="Plugin paths to install.", 
+                      ('-w', "--plugins",): dict(dest="plugins",
+                                                 help="Plugin paths to install.",
                                                  metavar=None, default=None),
-                      ("-n", "--no-new-profile",): dict(dest="create_new", 
+                      ("-n", "--no-new-profile",): dict(dest="create_new",
                                                         action="store_false",
-                                                        help="Do not create new profile.", 
+                                                        help="Do not create new profile.",
                                                         metavar="MOZRUNNER_NEW_PROFILE",
                                                         default=True ),
                      }
-    
+
     runner_class = FirefoxRunner
     profile_class = FirefoxProfile
-    
+
     def __init__(self):
         self.parser = optparse.OptionParser()
         for names, opts in self.parser_options.items():
             self.parser.add_option(*names, **opts)
-                      
+
     def parse_and_get_runner(self):
         """Parses the command line arguments and returns a runner instance."""
         (options, args) = self.parser.parse_args()
@@ -478,8 +478,8 @@ class CLI(object):
             plugins = self.options.plugins.split(',')
 
         runner = self.get_runner(binary=self.options.binary)
-        
-        profile = self.get_profile(binary=runner.binary, 
+
+        profile = self.get_profile(binary=runner.binary,
                                    profile=options.profile, create_new=options.create_new,
                                    plugins=plugins)
         runner.profile = profile
@@ -489,12 +489,12 @@ class CLI(object):
                     preferences={}):
         """Returns the profile instance for the given command line arguments."""
         return self.profile_class(binary, profile, create_new, plugins, preferences)
-        
+
     def get_runner(self, binary=None, profile=None):
         """Returns the runner instance for the given command line binary arguemt
         the profile instance returned from self.get_profile()."""
         return self.runner_class(binary, profile)
-        
+
     def run(self):
         """Runs self.start(self.parse_and_get_runner())"""
         runner = self.parse_and_get_runner()
@@ -503,14 +503,14 @@ class CLI(object):
 
     def start(self, runner):
         """Starts the runner and waits for Firefox to exitor Keyboard Interrupt.
-        Shoule be overwritten to provide custom running of the runner instance.""" 
+        Shoule be overwritten to provide custom running of the runner instance."""
         runner.start()
         print 'Started:', ' '.join(runner.command)
         try:
             runner.wait()
         except KeyboardInterrupt:
             runner.stop()
-        
-        
+
+
 def cli():
-    CLI().run()        
+    CLI().run()
