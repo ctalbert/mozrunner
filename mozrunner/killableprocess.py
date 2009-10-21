@@ -212,13 +212,11 @@ class Popen(subprocess.Popen):
                 def group_wait():
                     try:
                         count = 0
-                        if timeout is not None:
-                            while ((count * 2) <= timeout):
-                                os.killpg(self.pid, signal.SIG_DFL)
-                                time.sleep(.5); count += .5
-                        else:
-                            while 1:
-                                os.killpg(self.pid, signal.SIG_DFL)
+                        if timeout is None:
+                            timeout = 10 # Have to set some kind of timeout or else this could go on forever
+                        while ((count * 2) <= timeout):
+                            os.killpg(self.pid, signal.SIG_DFL)
+                            time.sleep(.5); count += .5
                     except exceptions.OSError:
                         return self.returncode
                         
