@@ -99,6 +99,7 @@ if not mswindows:
         pass
 
 class Popen(subprocess.Popen):
+    kill_called = False
     if mswindows:
         def _execute_child(self, args, executable, preexec_fn, close_fds,
                            cwd, env, universal_newlines, startupinfo,
@@ -158,6 +159,7 @@ class Popen(subprocess.Popen):
 
     def kill(self, group=True):
         """Kill the process. If group=True, all sub-processes will also be killed."""
+        self.kill_called = True
         if mswindows:
             if group:
                 winprocess.TerminateJobObject(self._job, 127)
@@ -211,11 +213,12 @@ class Popen(subprocess.Popen):
             elif sys.platform == 'darwin':
                 def group_wait(timeout):
                     try:
-                        # Have to set some kind of timeout or else this could go on forever
-                        if timeout is None:
-                            timeout = 10
-                        
                         count = 0
+                        if timeout is None and self.kill_called:
+                            timeout = 10 # Have to set some kind of timeout or else this could go on forever                
+                        if timeout is None:
+                            while 1:
+                                os.killpg(self.pid, signal.SIG_DFL)
                         while ((count * 2) <= timeout):
                             os.killpg(self.pid, signal.SIG_DFL)
                             time.sleep(.5); count += .5
