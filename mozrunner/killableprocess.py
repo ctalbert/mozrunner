@@ -202,18 +202,20 @@ class Popen(subprocess.Popen):
                 self.returncode = winprocess.GetExitCodeProcess(self._handle)
         else:
             if sys.platform == 'linux2':
-                def group_wait():
+                def group_wait(timeout):
                     try:
                         os.waitpid(self.pid, 0)
                     except OSError, e:
                         pass # If wait has already been called on this pid, bad things happen
                     return self.returncode
             elif sys.platform == 'darwin':
-                def group_wait():
+                def group_wait(timeout):
                     try:
-                        count = 0
+                        # Have to set some kind of timeout or else this could go on forever
                         if timeout is None:
-                            timeout = 10 # Have to set some kind of timeout or else this could go on forever
+                            timeout = 10
+                        
+                        count = 0
                         while ((count * 2) <= timeout):
                             os.killpg(self.pid, signal.SIG_DFL)
                             time.sleep(.5); count += .5
@@ -222,7 +224,7 @@ class Popen(subprocess.Popen):
                         
             if timeout is None:
                 if group is True:
-                    return group_wait()
+                    return group_wait(timeout)
                 else:
                     subprocess.Popen.wait(self)
                     return self.returncode
