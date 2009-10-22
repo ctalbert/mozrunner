@@ -233,7 +233,7 @@ class Popen(subprocess.Popen):
 
             while (starttime - datetime.datetime.now()).microseconds < timeout or ( returncode is False ):
                 if group is True:
-                    return group_wait()
+                    return group_wait(timeout)
                 else:
                     if subprocess.poll() is not None:
                         returncode = self.returncode
