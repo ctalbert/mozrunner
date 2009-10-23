@@ -444,9 +444,6 @@ class CLI(object):
 
     parser_options = {("-b", "--binary",): dict(dest="binary", help="Binary path.",
                                                 metavar=None, default=None),
-                      # ("-d", "--default-profile",): dict(dest="default_profile",
-                      #                                    help="Default profile path.",
-                      #                                    metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.",
                                                  metavar=None, default=None),
                       ('-w', "--plugins",): dict(dest="plugins",
@@ -463,41 +460,39 @@ class CLI(object):
     profile_class = FirefoxProfile
 
     def __init__(self):
+        """ Setup command line parser and parse arguments """
         self.parser = optparse.OptionParser()
         for names, opts in self.parser_options.items():
             self.parser.add_option(*names, **opts)
+        (self.options, self.args) = self.parser.parse_args()
 
-    def parse_and_get_runner(self):
-        """Parses the command line arguments and returns a runner instance."""
-        (options, args) = self.parser.parse_args()
-        self.options  = options
-        self.args = args
-        if self.options.plugins is None:
-            plugins = []
-        else:
-            plugins = self.options.plugins.split(',')
+        try:
+            self.plugins = self.options.plugins.split(',')
+        except:
+            self.plugins = []
 
+    def create_runner(self):
+        """ Get the runner object """
         runner = self.get_runner(binary=self.options.binary)
-
         profile = self.get_profile(binary=runner.binary,
-                                   profile=options.profile, create_new=options.create_new,
-                                   plugins=plugins)
+                                   profile=self.options.profile,
+                                   create_new=self.options.create_new,
+                                   plugins=self.plugins)
         runner.profile = profile
         return runner
+
+    def get_runner(self, binary=None, profile=None):
+        """Returns the runner instance for the given command line binary argument
+        the profile instance returned from self.get_profile()."""
+        return self.runner_class(binary, profile)
 
     def get_profile(self, binary=None, profile=None, create_new=None, plugins=[],
                     preferences={}):
         """Returns the profile instance for the given command line arguments."""
         return self.profile_class(binary, profile, create_new, plugins, preferences)
 
-    def get_runner(self, binary=None, profile=None):
-        """Returns the runner instance for the given command line binary arguemt
-        the profile instance returned from self.get_profile()."""
-        return self.runner_class(binary, profile)
-
     def run(self):
-        """Runs self.start(self.parse_and_get_runner())"""
-        runner = self.parse_and_get_runner()
+        runner = self.create_runner()
         self.start(runner)
         runner.profile.cleanup()
 
