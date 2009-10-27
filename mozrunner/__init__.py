@@ -37,7 +37,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import os, sys
+import os
+import sys
 import copy
 import tempfile
 import shutil
@@ -442,6 +443,9 @@ class ThunderbirdRunner(Runner):
 class CLI(object):
     """Command line interface."""
 
+    runner_class = FirefoxRunner
+    profile_class = FirefoxProfile
+
     parser_options = {("-b", "--binary",): dict(dest="binary", help="Binary path.",
                                                 metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.",
@@ -455,9 +459,6 @@ class CLI(object):
                                                         metavar="MOZRUNNER_NEW_PROFILE",
                                                         default=True ),
                      }
-
-    runner_class = FirefoxRunner
-    profile_class = FirefoxProfile
 
     def __init__(self):
         """ Setup command line parser and parse arguments """
