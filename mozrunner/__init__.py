@@ -357,8 +357,9 @@ class Runner(object):
                 if binary is None:
                     for bin in [(program_files, 'Mozilla Firefox', 'firefox.exe'),
                                 ]:
-                        if os.path.isfile(os.path.join(bin)):
-                            binary = bin
+                        path = os.path.join(*bin)
+                        if os.path.isfile(path):
+                            binary = path
                             break
         elif sys.platform == 'darwin':
             for name in reversed(self.names):
