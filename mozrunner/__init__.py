@@ -273,7 +273,8 @@ class Profile(object):
     def clean_plugins(self):
         """Cleans up plugins in the profile."""
         for plugin in self.plugins_installed:
-            rmtree(plugin)
+            if os.path.isdir(plugin):
+                rmtree(plugin)
 
     def cleanup(self):
         """Cleanup operations on the profile."""
