@@ -41,7 +41,6 @@ import os
 import sys
 import copy
 import tempfile
-import shutil
 import signal
 import commands
 import zipfile
@@ -60,7 +59,9 @@ except ImportError:
 import logging
 logger = logging.getLogger(__name__)
 
+# Use dir_util for copy/rm operations because shutil is all kinds of broken
 copytree = dir_util.copy_tree
+rmtree = dir_util.remove_tree
 
 if sys.platform != 'win32':
     import pwd
@@ -194,7 +195,7 @@ class Profile(object):
         """Create a new clean profile in tmp which is a simple empty folder"""
         profile = tempfile.mkdtemp(suffix='.mozrunner')
         if os.path.exists(profile) is True:
-            shutil.rmtree(profile)
+            rmtree(profile)
         makedirs(profile)
 
         return profile
@@ -272,12 +273,13 @@ class Profile(object):
     def clean_plugins(self):
         """Cleans up plugins in the profile."""
         for plugin in self.plugins_installed:
-            shutil.rmtree(plugin)
+            if os.path.isdir(plugin):
+                rmtree(plugin)
 
     def cleanup(self):
         """Cleanup operations on the profile."""
         if self.create_new:
-            shutil.rmtree(self.profile)
+            rmtree(self.profile)
         else:
             self.clean_preferences()
             self.clean_plugins()
