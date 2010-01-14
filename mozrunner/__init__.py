@@ -65,8 +65,6 @@ rmtree = dir_util.remove_tree
 
 if sys.platform != 'win32':
     import pwd
-else:
-    import win32api, win32pdhutil, win32con
 
 def findInPath(fileName, path=os.environ['PATH']):
     dirs = path.split(os.pathsep)
