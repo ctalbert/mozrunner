@@ -285,7 +285,8 @@ class Profile(object):
 
 class FirefoxProfile(Profile):
     """Specialized Profile subclass for Firefox"""
-    preferences = {'extensions.update.enabled'    : False,
+    preferences = {'app.update.enabled' : False,
+                   'extensions.update.enabled'    : False,
                    'extensions.update.notifyUser' : False,
                    'browser.shell.checkDefaultBrowser' : False,
                    'browser.tabs.warnOnClose' : False,
