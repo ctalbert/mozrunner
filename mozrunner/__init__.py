@@ -222,6 +222,8 @@ class Profile(object):
         desc = tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')
         if desc and desc.attrib.has_key('{http://www.mozilla.org/2004/em-rdf#}id'):
             plugin_id = desc.attrib['{http://www.mozilla.org/2004/em-rdf#}id']
+        elif desc and desc.find('.//{http://www.mozilla.org/2004/em-rdf#}id') is not None:
+            plugin_id = desc.find('.//{http://www.mozilla.org/2004/em-rdf#}id').text
         else:
             about = [e for e in tree.findall(
                         './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if
