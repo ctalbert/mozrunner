@@ -453,9 +453,9 @@ class CLI(object):
                                                 metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.",
                                                  metavar=None, default=None),
-                      ('-w', "--plugins",): dict(dest="plugins",
-                                                 help="Plugin paths to install.",
-                                                 metavar=None, default=None),
+                      ('-a', "--addons",): dict(dest="addons",
+                                                help="Addons paths to install.",
+                                                metavar=None, default=None),
                       ("-n", "--no-new-profile",): dict(dest="create_new",
                                                         action="store_false",
                                                         help="Do not create new profile.",
@@ -471,7 +471,7 @@ class CLI(object):
         (self.options, self.args) = self.parser.parse_args()
 
         try:
-            self.plugins = self.options.plugins.split(',')
+            self.plugins = self.options.addons.split(',')
         except:
             self.plugins = []
 
