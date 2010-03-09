@@ -222,6 +222,8 @@ class Profile(object):
         desc = tree.find('.//{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description')
         if desc and desc.attrib.has_key('{http://www.mozilla.org/2004/em-rdf#}id'):
             plugin_id = desc.attrib['{http://www.mozilla.org/2004/em-rdf#}id']
+        elif desc and desc.find('.//{http://www.mozilla.org/2004/em-rdf#}id') is not None:
+            plugin_id = desc.find('.//{http://www.mozilla.org/2004/em-rdf#}id').text
         else:
             about = [e for e in tree.findall(
                         './/{http://www.w3.org/1999/02/22-rdf-syntax-ns#}Description') if
@@ -285,7 +287,8 @@ class Profile(object):
 
 class FirefoxProfile(Profile):
     """Specialized Profile subclass for Firefox"""
-    preferences = {'extensions.update.enabled'    : False,
+    preferences = {'app.update.enabled' : False,
+                   'extensions.update.enabled'    : False,
                    'extensions.update.notifyUser' : False,
                    'browser.shell.checkDefaultBrowser' : False,
                    'browser.tabs.warnOnClose' : False,
@@ -297,7 +300,7 @@ class FirefoxProfile(Profile):
     def names(self):
         if sys.platform == 'darwin':
             return ['firefox', 'minefield', 'shiretoko']
-        if sys.platform == 'linux2':
+        if (sys.platform == 'linux2') or (sys.platform == "solaris"):
             return ['firefox', 'mozilla-firefox', 'iceweasel']
         if os.name == 'nt' or sys.platform == 'cygwin':
             return ['firefox']
@@ -320,8 +323,8 @@ class Runner(object):
                  aggressively_kill=['crashreporter'], kp_kwargs={}):
         if binary is None:
             self.binary = self.find_binary()
-        elif binary.endswith('.app'):
-            self.binary = os.path.join(binary, 'Contents/MacOS/'+self.names[0]+'-bin')
+        elif sys.platform == 'darwin':
+            self.binary = os.path.join(binary, 'Contents/MacOS/%s-bin' % self.names[0])
         else:
             self.binary = binary
 
@@ -343,7 +346,7 @@ class Runner(object):
     def find_binary(self):
         """Finds the binary for self.names if one was not provided."""
         binary = None
-        if sys.platform == 'linux2':
+        if (sys.platform == 'linux2') or (sys.platform == "solaris"):
             for name in reversed(self.names):
                 binary = findInPath(name)
         elif os.name == 'nt' or sys.platform == 'cygwin':
@@ -429,7 +432,7 @@ class FirefoxRunner(Runner):
     def names(self):
         if sys.platform == 'darwin':
             return ['firefox', 'minefield', 'shiretoko']
-        if sys.platform == 'linux2':
+        if (sys.platform == 'linux2') or (sys.platform == "solaris"):
             return ['firefox', 'mozilla-firefox', 'iceweasel']
         if os.name == 'nt' or sys.platform == 'cygwin':
             return ['firefox']
@@ -450,9 +453,9 @@ class CLI(object):
                                                 metavar=None, default=None),
                       ('-p', "--profile",): dict(dest="profile", help="Profile path.",
                                                  metavar=None, default=None),
-                      ('-w', "--plugins",): dict(dest="plugins",
-                                                 help="Plugin paths to install.",
-                                                 metavar=None, default=None),
+                      ('-a', "--addons",): dict(dest="addons",
+                                                help="Addons paths to install.",
+                                                metavar=None, default=None),
                       ("-n", "--no-new-profile",): dict(dest="create_new",
                                                         action="store_false",
                                                         help="Do not create new profile.",
@@ -468,7 +471,7 @@ class CLI(object):
         (self.options, self.args) = self.parser.parse_args()
 
         try:
-            self.plugins = self.options.plugins.split(',')
+            self.plugins = self.options.addons.split(',')
         except:
             self.plugins = []
 
